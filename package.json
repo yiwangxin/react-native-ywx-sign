@@ -1,6 +1,6 @@
 {
   "name": "react-native-ywx-sign",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a sign service  by 51Trust",
   "main": "index.js",
   "scripts": {
@@ -12,5 +12,13 @@
     "react-native-ywx-sign"
   ],
   "author": "51trust",
-  "license": "ISC"
+  "license": "ISC",
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daizhenhong/react-native-ywx-sign.git"
+  },
+  "bugs": {
+    "url": "https://github.com/daizhenhong/react-native-ywx-sign/issues"
+  }
 }
