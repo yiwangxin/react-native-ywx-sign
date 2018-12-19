@@ -30,8 +30,16 @@ android {
 
 }
 
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+//    implementation project(':doctor-sdk-3.0.0')
 
     implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', "26.1.0")}"
     implementation 'com.facebook.react:react-native:+'
