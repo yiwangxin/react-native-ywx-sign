@@ -3,13 +3,16 @@ package cn.org.bjca.sign;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.JsonWriter;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 
 import java.util.List;
 
@@ -157,14 +160,16 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void sign(String clientId, List uniqueIdList, final Callback callback) {
+    public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
         mActivity = getCurrentActivity();
-        BJCASDK.getInstance().sign(mActivity, clientId, uniqueIdList, new YWXListener() {
+        List list = uniqueIdList.toArrayList();
+        BJCASDK.getInstance().sign(mActivity, clientId, list, new YWXListener() {
             @Override
             public void callback(String s) {
                 callback.invoke(s);
             }
         });
+
     }
 
 
