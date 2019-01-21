@@ -16,8 +16,10 @@ import com.facebook.react.bridge.ReadableArray;
 
 import java.util.List;
 
+import cn.org.bjca.sdk.core.bean.FingerSignState;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
 import cn.org.bjca.sdk.core.kit.YWXListener;
+import cn.org.bjca.sdk.core.utils.Logs;
 import cn.org.bjca.sdk.core.values.EnvType;
 
 /*************************************************************************************************
@@ -203,9 +205,40 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         callback.invoke(serverUrl);
     }
 
+
+    /**
+     * 修改指纹签名
+     * @param fingerSignState
+     * @param callback
+     */
+    @ReactMethod
+    public void alterFingerSignState(int fingerSignState, final Callback callback) {
+        mActivity = getCurrentActivity();
+        FingerSignState state =null;
+        try {
+            state = FingerSignState.values()[fingerSignState];
+        } catch (IndexOutOfBoundsException ex) {
+            Logs.e(ex);
+            throw ex;
+        }
+        BJCASDK.getInstance().alterFingerSignState(mActivity,state, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                callback.invoke(s);
+            }
+        });
+
+    }
+    @ReactMethod
+    public void getFingerSignState(final Callback callback) {
+        mActivity = getCurrentActivity();
+        FingerSignState fingerSignState = BJCASDK.getInstance().getFingerSignState(mActivity);
+        callback.invoke(fingerSignState.ordinal());
+    }
+
+
     private void invokeBoolean(Callback callback,boolean flag){
         callback.invoke(flag);
     }
-
 
 }
