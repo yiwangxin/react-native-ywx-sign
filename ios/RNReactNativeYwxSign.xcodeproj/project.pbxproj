@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		04405C8B21F5B5EE00518BB7 /* BjcaSignSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04405C8921F5B5ED00518BB7 /* BjcaSignSDK.framework */; };
-		04405C8C21F5B5FB00518BB7 /* Signet-SDK-Bundle.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 04405C8A21F5B5ED00518BB7 /* Signet-SDK-Bundle.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		04405C9621F5B79100518BB7 /* BjcaRNTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 04405C9421F5B79100518BB7 /* BjcaRNTools.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNReactNativeYwxSign.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNReactNativeYwxSign.m */; };
 /* End PBXBuildFile section */
@@ -20,15 +18,12 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				04405C8C21F5B5FB00518BB7 /* Signet-SDK-Bundle.bundle in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		04405C8921F5B5ED00518BB7 /* BjcaSignSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BjcaSignSDK.framework; sourceTree = "<group>"; };
-		04405C8A21F5B5ED00518BB7 /* Signet-SDK-Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "Signet-SDK-Bundle.bundle"; sourceTree = "<group>"; };
 		04405C9421F5B79100518BB7 /* BjcaRNTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BjcaRNTools.m; sourceTree = "<group>"; };
 		04405C9521F5B79100518BB7 /* BjcaRNTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BjcaRNTools.h; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNReactNativeYwxSign.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNReactNativeYwxSign.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,22 +36,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04405C8B21F5B5EE00518BB7 /* BjcaSignSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		04405C8821F5B5ED00518BB7 /* BjcaSignSDK */ = {
-			isa = PBXGroup;
-			children = (
-				04405C8921F5B5ED00518BB7 /* BjcaSignSDK.framework */,
-				04405C8A21F5B5ED00518BB7 /* Signet-SDK-Bundle.bundle */,
-			);
-			path = BjcaSignSDK;
-			sourceTree = "<group>";
-		};
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -68,7 +53,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				04405C8821F5B5ED00518BB7 /* BjcaSignSDK */,
 				B3E7B5881CC2AC0600A0062D /* RNReactNativeYwxSign.h */,
 				B3E7B5891CC2AC0600A0062D /* RNReactNativeYwxSign.m */,
 				04405C9521F5B79100518BB7 /* BjcaRNTools.h */,
@@ -227,7 +211,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BjcaSignSDK",
+					"$(SRCROOT)/../Example/ios/Example/BjcaSignSDK/",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -247,7 +231,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BjcaSignSDK",
+					"$(SRCROOT)/../Example/ios/Example/BjcaSignSDK/",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
