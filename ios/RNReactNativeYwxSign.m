@@ -54,7 +54,6 @@ RCT_EXPORT_METHOD(CertUpdate:(NSString *)clientId){
 RCT_EXPORT_METHOD(CertReset:(NSString *)clientId){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
     [self.signer bjcaCertReset:clientId curViewCtrl:ctrl];
-    //    [self.signer bjcaCertDown:clientId phoneNum:phone curViewCtrl:ctrl];
 }
 
 #pragma mark 签章设置
@@ -96,8 +95,6 @@ RCT_EXPORT_METHOD(openCertDetails:(NSString *)clientId){
 
 #pragma mark 获取当前环境地址
 RCT_EXPORT_METHOD(getCurAddress:(NSString *)clientId){
-    //    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    //    [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
     NSString *address = [BjcaSignManager bjcaAddress];
 }
 
