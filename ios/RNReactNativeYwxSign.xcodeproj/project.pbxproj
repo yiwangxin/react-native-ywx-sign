@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04405C9621F5B79100518BB7 /* BjcaRNTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 04405C9421F5B79100518BB7 /* BjcaRNTools.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNReactNativeYwxSign.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNReactNativeYwxSign.m */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04405C9421F5B79100518BB7 /* BjcaRNTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BjcaRNTools.m; sourceTree = "<group>"; };
+		04405C9521F5B79100518BB7 /* BjcaRNTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BjcaRNTools.h; sourceTree = "<group>"; };
 		134814201AA4EA6300B7C361 /* libRNReactNativeYwxSign.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNReactNativeYwxSign.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5881CC2AC0600A0062D /* RNReactNativeYwxSign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNReactNativeYwxSign.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNReactNativeYwxSign.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNReactNativeYwxSign.m; sourceTree = "<group>"; };
@@ -52,6 +55,8 @@
 			children = (
 				B3E7B5881CC2AC0600A0062D /* RNReactNativeYwxSign.h */,
 				B3E7B5891CC2AC0600A0062D /* RNReactNativeYwxSign.m */,
+				04405C9521F5B79100518BB7 /* BjcaRNTools.h */,
+				04405C9421F5B79100518BB7 /* BjcaRNTools.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNReactNativeYwxSign.m in Sources */,
+				04405C9621F5B79100518BB7 /* BjcaRNTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,8 +209,12 @@
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../Example/ios/Example/BjcaSignSDK/",
+				);
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
@@ -219,6 +229,10 @@
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../Example/ios/Example/BjcaSignSDK/",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
