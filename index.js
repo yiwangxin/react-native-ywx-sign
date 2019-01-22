@@ -1,5 +1,5 @@
 /** @format */
-import {NativeModules} from 'react-native';
+import {NativeModules, Platform} from 'react-native';
 
 const SignModule = NativeModules.YWXSignModule;
 
@@ -24,6 +24,22 @@ const SignManager = {
         },
 
         /**
+         * 回调json对象（android需要进行json字符串转换，ios返回的是json对象，不需要转换）
+         * @param callback
+         * @param json
+         */
+        callbackJson: function (callback, json) {
+            if (Platform.OS === "android") {
+                try {
+                    json = JSON.parse(json)
+                } catch (e) {
+                    console.log(json, e)
+                }
+            }
+            callback(json);
+        },
+
+        /**
          * 证书是否存在
          * @param callback  callback（result） result-true  存在    其他：不存在
          */
@@ -40,8 +56,7 @@ const SignManager = {
          */
         certDown: function (clientId, phone, callback) {
             SignModule.certDown(clientId, phone, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
 
@@ -52,8 +67,7 @@ const SignManager = {
          */
         certUpdate: function (clientId, callback) {
             SignModule.certUpdate(clientId, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -71,8 +85,7 @@ const SignManager = {
          */
         certResetPin: function (clientId, callback) {
             SignModule.certResetPin(clientId, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -82,8 +95,7 @@ const SignManager = {
          */
         showCertView: function (clientId, callback) {
             SignModule.showCertView(clientId, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -93,8 +105,7 @@ const SignManager = {
          */
         getCertInfo: function (clientId, callback) {
             SignModule.getCertInfo(clientId, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -104,8 +115,7 @@ const SignManager = {
          */
         drawStamp: function (clientId, callback) {
             SignModule.drawStamp(clientId, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -123,8 +133,7 @@ const SignManager = {
          */
         keepPin: function (clientId, keepDay, callback) {
             SignModule.keepPin(clientId, keepDay, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -141,8 +150,7 @@ const SignManager = {
         clearPin: function (callback) {
             SignModule.clearPin((result) => {
                 console.log(result)
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -153,8 +161,7 @@ const SignManager = {
          */
         qrDispose: function (clientId, qrText, callback) {
             SignModule.qrDispose(clientId, qrText, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             });
         },
         /**
@@ -172,25 +179,7 @@ const SignManager = {
          */
         sign: function (clientId, uniqueIdList, callback) {
             SignModule.sign(clientId, uniqueIdList, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
-            });
-        },
-        /**
-         * 开启指纹签名
-         * @param callback
-         */
-        enableFingerSign: function (callback) {
-            SignModule.enableFingerSign((result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
-            });
-        },
-
-        disableFingerSign: function (callback) {
-            SignModule.disableFingerSign((result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);
             });
         },
 
@@ -200,10 +189,8 @@ const SignManager = {
          * @param callback
          */
         alterFingerSignState: function (fingerSignState, callback) {
-            console.log(fingerSignState)
             SignModule.alterFingerSignState(fingerSignState, (result) => {
-                let resultJson = JSON.parse(result);
-                callback && callback(resultJson);
+                this.callbackJson(callback,result);;
             })
         },
 

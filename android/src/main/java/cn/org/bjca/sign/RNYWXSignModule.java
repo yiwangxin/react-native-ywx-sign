@@ -14,6 +14,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import cn.org.bjca.sdk.core.bean.FingerSignState;
@@ -56,7 +59,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void existsCert(Callback callback) {
         mActivity = getCurrentActivity();
         boolean existsCert = BJCASDK.getInstance().existsCert(this.mActivity);
-        this.invokeBoolean(callback, existsCert);
+        callback.invoke(existsCert);
     }
 
 
@@ -66,7 +69,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().certDown(mActivity, clientId, phone, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -77,7 +80,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().certUpdate(mActivity, clientId, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -88,7 +91,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().certResetPin(mActivity, clientId, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -99,7 +102,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().showCertActivity(mActivity, clientId, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -110,7 +113,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().getUserInfo(mActivity, clientId, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -121,7 +124,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().drawStamp(mActivity, clientId, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -141,7 +144,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().keepPin(mActivity, clientId, keepDay, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -150,14 +153,14 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void isPinExempt(final Callback callback) {
         mActivity = getCurrentActivity();
         boolean isPinExempt = BJCASDK.getInstance().isPinExempt(mActivity);
-        this.invokeBoolean(callback, isPinExempt);
+        callback.invoke(isPinExempt);
     }
 
     @ReactMethod
     public void clearPin(final Callback callback) {
         mActivity = getCurrentActivity();
         boolean success = BJCASDK.getInstance().clearPin(mActivity);
-        this.invokeBoolean(callback, success);
+        callback.invoke(success);
     }
 
 
@@ -168,7 +171,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().sign(mActivity, clientId, list, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
 
@@ -181,7 +184,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().qrDispose(mActivity, clientId, qrText, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
     }
@@ -224,7 +227,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().alterFingerSignState(mActivity,state, new YWXListener() {
             @Override
             public void callback(String s) {
-                callback.invoke(s);
+                invokeJsonCallback(callback, s);
             }
         });
 
@@ -236,9 +239,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         callback.invoke(fingerSignState.ordinal());
     }
 
-
-    private void invokeBoolean(Callback callback,boolean flag){
-        callback.invoke(flag);
+    private void invokeJsonCallback(Callback callback,String jsonStr) {
+        callback.invoke(jsonStr);
     }
-
 }
