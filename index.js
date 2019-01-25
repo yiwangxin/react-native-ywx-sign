@@ -6,21 +6,19 @@ const SignModule = NativeModules.YWXSignModule;
 const SignManager = {
         /**
          * 配置sdk的地址类型
-         * @type {{public: number, integrate: number, test: number, dev: number, testDomain: number, devDomain: number}}
+         * @type {{public: 正式环境, integrate: 集成环境, test: 测试环境, dev: 开发环境}}
          */
         envType: {
-            public: 0,  //正式环境
-            integrate: 1, //集成环境
-            test: 2,    //测试环境-ip地址
-            dev: 3,      //开发环境-ip地址
-            testDomain: 4,    //测试环境-域名
-            devDomain: 5     //开发环境-域名
+            public: SignModule.BjcaPublic,  //正式环境
+            integrate: SignModle.BjcaIntegrate, //集成环境
+            test: SignModle.BjcaTest,    //测试环境
+            dev: SignModle.BjcaDev,      //开发环境
         },
 
         /** 指纹*/
         fingerSignState: {
-            off: 0,
-            on: 1
+            off: SignModule.BjcaFingerSignOn, //指纹签名开启
+            on: SignModule.BjcaFingerSignOff  //指纹签名关闭
         },
 
         /**
@@ -56,7 +54,8 @@ const SignManager = {
          */
         certDown: function (clientId, phone, callback) {
             SignModule.certDown(clientId, phone, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
 
@@ -67,7 +66,8 @@ const SignManager = {
          */
         certUpdate: function (clientId, callback) {
             SignModule.certUpdate(clientId, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -85,7 +85,8 @@ const SignManager = {
          */
         certResetPin: function (clientId, callback) {
             SignModule.certResetPin(clientId, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -95,7 +96,8 @@ const SignManager = {
          */
         showCertView: function (clientId, callback) {
             SignModule.showCertView(clientId, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -105,7 +107,8 @@ const SignManager = {
          */
         getCertInfo: function (clientId, callback) {
             SignModule.getCertInfo(clientId, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -115,7 +118,8 @@ const SignManager = {
          */
         drawStamp: function (clientId, callback) {
             SignModule.drawStamp(clientId, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -133,7 +137,8 @@ const SignManager = {
          */
         keepPin: function (clientId, keepDay, callback) {
             SignModule.keepPin(clientId, keepDay, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -149,8 +154,8 @@ const SignManager = {
          */
         clearPin: function (callback) {
             SignModule.clearPin((result) => {
-                console.log(result)
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -161,7 +166,8 @@ const SignManager = {
          */
         qrDispose: function (clientId, qrText, callback) {
             SignModule.qrDispose(clientId, qrText, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             });
         },
         /**
@@ -179,7 +185,7 @@ const SignManager = {
          */
         sign: function (clientId, uniqueIdList, callback) {
             SignModule.sign(clientId, uniqueIdList, (result) => {
-                this.callbackJson(callback,result);
+                this.callbackJson(callback, result);
             });
         },
 
@@ -190,7 +196,8 @@ const SignManager = {
          */
         alterFingerSignState: function (fingerSignState, callback) {
             SignModule.alterFingerSignState(fingerSignState, (result) => {
-                this.callbackJson(callback,result);;
+                this.callbackJson(callback, result);
+                ;
             })
         },
 

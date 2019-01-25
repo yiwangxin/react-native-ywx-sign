@@ -17,7 +17,11 @@ import com.facebook.react.bridge.ReadableArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import cn.org.bjca.sdk.core.bean.FingerSignState;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
@@ -237,6 +241,21 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         mActivity = getCurrentActivity();
         FingerSignState fingerSignState = BJCASDK.getInstance().getFingerSignState(mActivity);
         callback.invoke(fingerSignState.ordinal());
+    }
+
+
+    @Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put("BjcaPublic", EnvType.PUBLIC.ordinal());
+        constants.put("BjcaIntegrate", EnvType.INTEGRATE.ordinal());
+        constants.put("BjcaTest", EnvType.TEST_DOMAIN.ordinal());
+        constants.put("BjcaDev", EnvType.DEV_DOMAIN.ordinal());
+
+        constants.put("BjcaFingerSignOn", FingerSignState.on.ordinal());
+        constants.put("BjcaFingerSignOff", FingerSignState.off.ordinal());
+        return constants;
     }
 
     private void invokeJsonCallback(Callback callback,String jsonStr) {
