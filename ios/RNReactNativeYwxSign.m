@@ -10,6 +10,8 @@
 
 @property (nonatomic,strong) BjcaSignManager *signer;
 
+@property (nonatomic,strong) RCTResponseSenderBlock callBack;
+
 @end
 
 @implementation RNReactNativeYwxSign
@@ -17,11 +19,13 @@
 //lazy
 - (BjcaSignManager *)signer{
     if (_signer) {
+        //设置默认环境
         _signer.bjcaSignDelegate = self;
         return _signer;
     }
     _signer = [BjcaSignManager bjcaShareBjcaSignManager];
     _signer.bjcaSignDelegate = self;
+    
     return _signer;
 }
 
@@ -39,56 +43,73 @@ RCT_EXPORT_MODULE(SignModule)
 }
 
 #pragma mark 证书下载
-RCT_EXPORT_METHOD(CertDown:(NSString *)clientId phone:(NSString *)phone){
+RCT_EXPORT_METHOD(certDown:(NSString *)clientId phone:(NSString *)phone completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack = callback;
     [self.signer bjcaCertDown:clientId phoneNum:phone curViewCtrl:ctrl];
+    
 }
 
 #pragma mark 证书更新
-RCT_EXPORT_METHOD(CertUpdate:(NSString *)clientId){
+RCT_EXPORT_METHOD(certUpdate:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack = callback;
     [self.signer bjcaCertUpdate:clientId curViewCtrl:ctrl];
 }
 
 #pragma mark 证书密码重置
-RCT_EXPORT_METHOD(CertReset:(NSString *)clientId){
+RCT_EXPORT_METHOD(certResetPin:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack = callback;
     [self.signer bjcaCertReset:clientId curViewCtrl:ctrl];
 }
 
 #pragma mark 签章设置
-RCT_EXPORT_METHOD(setStamp:(NSString *)clientId){
+RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    [self.signer bjcaSetStamp:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
+    self.callBack = callback;
+    [self.signer bjcaSetStamp:clientId curViewCtrl:ctrl navColor:[UIColor redColor] navFontColor:[UIColor whiteColor]];
 }
 
 
 #pragma mark 批量签名
-RCT_EXPORT_METHOD(SignList:(NSMutableArray *)uniqueIds clientId:(NSString *)clientId){
+RCT_EXPORT_METHOD(sign:(NSMutableArray *)uniqueIds clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack = callback;
     [self.signer bjcaBatchSignList:uniqueIds userClientId:clientId curViewCtrl:ctrl];
 }
 
-#pragma mark 免密签名开关
-RCT_EXPORT_METHOD(FreePin:(int)day clientId:(NSString *)clientId){
+#pragma mark 免密签名开启
+RCT_EXPORT_METHOD(keepPin:(int)day clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack = callback;
     [self.signer bjcaFreePinSign:day clientId:clientId curViewCtrl:ctrl];
 }
 
+#pragma mark 当前是否处于免密状态
+RCT_EXPORT_METHOD(isPinExempt){
+    
+}
+
+#pragma mark 关闭免密
+RCT_EXPORT_METHOD(clearPin){
+    
+}
+
 #pragma mark 二维码解析
-RCT_EXPORT_METHOD(qrSign:(NSString *)qrString clientId:(NSString *)clientId){
+RCT_EXPORT_METHOD(qrDispose:(NSString *)qrString clientId:(NSString *)clientId){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
     [self.signer bjcaQrSign:qrString userClientId:clientId curViewCtrl:ctrl];
 }
 
 #pragma mark 获取用户信息
-RCT_EXPORT_METHOD(getUserInfo:(NSString *)clientId){
+RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId){
     [self.signer bjcaUserInfo:clientId];
 }
 
 
 #pragma mark 打开证书详情页
-RCT_EXPORT_METHOD(openCertDetails:(NSString *)clientId){
+RCT_EXPORT_METHOD(showCertView:(NSString *)clientId){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
     [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
 }
@@ -99,7 +120,7 @@ RCT_EXPORT_METHOD(getCurAddress:(NSString *)clientId){
 }
 
 #pragma mark 是否存在证书
-RCT_EXPORT_METHOD(exiestCert){
+RCT_EXPORT_METHOD(existsCert){
     BOOL cert = [BjcaSignManager bjcaExistsCert];
 }
 
@@ -108,8 +129,25 @@ RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType){
     [BjcaSignManager bjcaSetServerURL:[severType intValue]];
 }
 
+#pragma mark 清除证书
+RCT_EXPORT_METHOD(clearCert){
+    
+}
+
+
+
+#pragma mark 获取sdk版本号
+RCT_EXPORT_METHOD(getVersion){
+
+}
+
+
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
-    NSLog(@"%@",backParam);
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    [array addObject:backParam];
+    if (self.callBack) {
+        self.callBack(array);
+    }
 }
 @end

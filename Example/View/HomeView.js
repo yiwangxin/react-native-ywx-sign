@@ -41,9 +41,6 @@ export class HomeView extends Component {
         }
     }
 
-    certDown() {
-        SignModule.CertDown(this.state.clientId,this.state.phoneNum)
-    }
 
     setServerType(){
         let aa = NativeModules
@@ -72,7 +69,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                            this.certDown()
+                            SignModule.certDown(this.state.clientId,this.state.phoneNum,(response)=>{
+                                console.log(response)
+                                alert("状态码："+response.status+"message："+response.message)
+                            })
                         }}
                         touchText="下载证书"
                     />
@@ -80,6 +80,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.certUpdate(this.state.clientId,(response)=>{
+                                console.log(response)
+                                alert("状态码："+response.status+"message："+response.message)
+                            })
                         }}
                         touchText="证书更新"
                     />
@@ -87,6 +91,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.certResetPin(this.state.clientId,(response)=>{
+                                console.log(response)
+                                alert("状态码："+response.status+"message："+response.message)
+                            })
                         }}
                         touchText="证书密码重置"
                     />
@@ -94,6 +102,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.drawStamp(this.state.clientId,(response)=>{
+                                console.log(response)
+                                alert("状态码："+response.status+"message："+response.message)
+                            })
                         }}
                         touchText="签章设置"
                     />
