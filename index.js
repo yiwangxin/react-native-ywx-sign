@@ -10,9 +10,9 @@ const SignManager = {
          */
         envType: {
             public: SignModule.BjcaPublic,  //正式环境
-            integrate: SignModle.BjcaIntegrate, //集成环境
-            test: SignModle.BjcaTest,    //测试环境
-            dev: SignModle.BjcaDev,      //开发环境
+            integrate: SignModule.BjcaIntegrate, //集成环境
+            test: SignModule.BjcaTest,    //测试环境
+            dev: SignModule.BjcaDev,      //开发环境
         },
 
         /** 指纹*/
