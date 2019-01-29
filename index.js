@@ -74,6 +74,8 @@ const SignManager = {
          * 设置医网信医师sdk的服务器类型
          * @param evnType 医师sdk的服务类型
          * @param callback
+         *
+         * @note 这个有必要加callback吗
          */
         setServerUrl: function (evnType, callback) {
             SignModule.setServerUrl(evnType, callback);
@@ -93,6 +95,7 @@ const SignManager = {
          * 展示证书详情
          * @param clientId
          * @param callback
+         *
          */
         showCertView: function (clientId, callback) {
             SignModule.showCertView(clientId, (result) => {
@@ -124,10 +127,10 @@ const SignManager = {
         },
         /**
          * 清除本地证书
-         * @param callback
+         *
          */
-        clearCert: function (callback) {
-            SignModule.clearCert(callback);
+        clearCert: function () {
+            SignModule.clearCert();
         },
         /**
          * 开启免密
@@ -150,13 +153,10 @@ const SignManager = {
         },
         /**
          * 取消免密
-         * @param callback
          */
-        clearPin: function (callback) {
-            SignModule.clearPin((result) => {
-                this.callbackJson(callback, result);
-                ;
-            });
+
+        clearPin: function () {
+            SignModule.clearPin();
         },
         /**
          * 二维码业务处理

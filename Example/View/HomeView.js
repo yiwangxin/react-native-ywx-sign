@@ -32,20 +32,19 @@ const {
 } = NativeModules;
 
 import {SZYXButton} from "../Component/SZYXButton";
+
 export class HomeView extends Component {
     constructor(props) {
         super(props)
         this.state = {
             clientId: "2015112716143758",
-            phoneNum: "15015617121"
+            phoneNum: "15015617121",
+            time:null,
         }
     }
 
-    certDown() {
-        SignModule.CertDown(this.state.clientId,this.state.phoneNum)
-    }
 
-    setServerType(){
+    setServerType() {
         let aa = NativeModules
         SignModule.setServerUrl(SignModule.BjcaDev)
     }
@@ -54,25 +53,36 @@ export class HomeView extends Component {
         return (
             <ScrollView style={HomeViewStyles.scrollStyle}>
                 <View style={HomeViewStyles.container}>
-                    <TextInput
-                        placeholder="厂商clientId填写"
-                        onChangeText={(value) => {
-                            this.setState({clientId: value})
-                        }}
-                        value={this.state.clientId}
-                    />
-                    <TextInput
-                        placeholder="手机号"
-                        onChangeText={(value) => {
-                            this.setState({phoneNum: value})
-                        }}
-                        value={this.state.phoneNum}
-                    />
+                    <View style={{justifyContent: "center", flexDirection: "row"}}>
+                        <Text style={{fontSize: 18}}>clientId: </Text>
+                        <TextInput
+                            style={{fontSize: 18}}
+                            placeholder="厂商填写"
+                            onChangeText={(value) => {
+                                this.setState({clientId: value})
+                            }}
+                            value={this.state.clientId}
+                        />
+                    </View>
+                    <View style={{justifyContent: "center", flexDirection: "row"}}>
+                        <Text style={{fontSize: 18}}>手机号: </Text>
+                        <TextInput
+                            style={{fontSize: 18}}
+                            placeholder="手机号"
+                            onChangeText={(value) => {
+                                this.setState({phoneNum: value})
+                            }}
+                            value={this.state.phoneNum}
+                        />
+                    </View>
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                            this.certDown()
+                            SignModule.certDown(this.state.clientId, this.state.phoneNum, (response) => {
+                                console.log(response)
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="下载证书"
                     />
@@ -80,6 +90,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.certUpdate(this.state.clientId, (response) => {
+                                console.log(response)
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="证书更新"
                     />
@@ -87,6 +101,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.certResetPin(this.state.clientId, (response) => {
+                                console.log(response)
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="证书密码重置"
                     />
@@ -94,6 +112,10 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.drawStamp(this.state.clientId, (response) => {
+                                console.log(response)
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="签章设置"
                     />
@@ -101,20 +123,62 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            this.props.navigation.navigate("BatchView",{
+                                clientId:this.state.clientId
+                            })
                         }}
                         touchText="批量签名"
                     />
+                    <View style={{justifyContent: "center", flexDirection: "row"}}>
+                        <Text style={{fontSize: 18}}>免密时间: </Text>
+                        <TextInput
+                            style={{fontSize: 18}}
+                            placeholder="时间（整数填写）"
+                            onChangeText={(value) => {
+                                this.setState({time: value})
+                            }}
+                            value={this.state.time}
+                        />
+                    </View>
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.keepPin(this.state.clientId, this.state.time, (response) => {
+                                console.log(response)
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
-                        touchText="免密签名"
+                        touchText="开启免密签名"
                     />
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.isPinExempt((response) => {
+                                if (response) {
+                                    alert("免密状态")
+                                } else {
+                                    alert("非免密状态")
+                                }
+                            })
+                        }}
+                        touchText="当前是否处于免密签名状态"
+                    />
+                    <SZYXButton
+                        touchStyle={HomeViewStyles.buttonStyle}
+                        touchTextStyle={HomeViewStyles.buttonTextStyle}
+                        touchClick={() => {
+                            SignModule.clearPin()
+                            alert("清除完毕")
+                        }}
+                        touchText="关闭免密签名"
+                    />
+                    <SZYXButton
+                        touchStyle={HomeViewStyles.buttonStyle}
+                        touchTextStyle={HomeViewStyles.buttonTextStyle}
+                        touchClick={() => {
+                            alert("未完待续")
                         }}
                         touchText="二维码扫码"
                     />
@@ -122,6 +186,9 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.getCertInfo(this.state.clientId,(response) => {
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="获取用户信息"
                     />
@@ -129,48 +196,44 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.showCertView(this.state.clientId,(response) => {
+
+                            })
                         }}
                         touchText="证书详情页"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                        }}
-                        touchText="获取用户信息"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
-                        }}
-                        touchText="获取用户信息"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
+                            SignModule.existsCert((response) => {
+                                if (response) {
+                                    alert("存在")
+                                } else {
+                                    alert("不存在")
+                                }
+                            })
                         }}
                         touchText="本地是否存在证书"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.clearCert();
                         }}
                         touchText="清除本地证书"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                        }}
-                        touchText="清除密码"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
+                            SignModule.getVersion((result)=>{
+                                alert(result)
+                            });
                         }}
                         touchText="获取当前版本号"
                     />

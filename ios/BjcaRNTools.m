@@ -58,9 +58,12 @@
 }
 
 
++ (UIViewController *)getCurrentVC{
+     UIWindow *window = [[[UIApplication sharedApplication] windows] firstObject];
+    return window.rootViewController;
+}
 
-
-+  (UIViewController *)getCurrentVC {
++  (UIViewController *)getCurrentVC2 {
     for (UIWindow *window in [UIApplication sharedApplication].windows.reverseObjectEnumerator) {
         
         UIView *tempView = window.subviews.lastObject;

@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../ios/RNReactNativeYwxSign.m"
-            timestampString = "569831083.390772"
+            filePath = "BjcaSignSDK/BjcaSignSDK/Untils/UserInfoManager/BjcaUserInfoManager.m"
+            timestampString = "570364603.528134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "-BjcaFinished:"
+            startingLineNumber = "434"
+            endingLineNumber = "434"
+            landmarkName = "+bjca_userInfo_savePin:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,12 +25,44 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../ios/RNReactNativeYwxSign.m"
-            timestampString = "569831083.391114"
+            filePath = "BjcaSignSDK/BjcaSignSDK/Untils/UserInfoManager/BjcaUserInfoManager.m"
+            timestampString = "570364603.528226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
+            landmarkName = "+bjca_userInfo_pin"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BjcaSignSDK/BjcaSignSDK/Untils/KeyChain/BjcaAlgCFYUserDataManager.m"
+            timestampString = "570364603.528299"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "+readKeyDic"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/RNReactNativeYwxSign.m"
+            timestampString = "570437971.0511301"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "RCT_EXPORT_METHOD"
             landmarkType = "9">
          </BreakpointContent>
