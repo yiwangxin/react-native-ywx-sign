@@ -17,8 +17,8 @@ const SignManager = {
 
         /** 指纹*/
         fingerSignState: {
-            off: SignModule.BjcaFingerSignOn, //指纹签名开启
-            on: SignModule.BjcaFingerSignOff  //指纹签名关闭
+            on: SignModule.BjcaFingerSignOn, //指纹签名开启
+            off: SignModule.BjcaFingerSignOff  //指纹签名关闭
         },
 
         /**
