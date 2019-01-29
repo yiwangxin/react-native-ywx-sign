@@ -123,25 +123,32 @@ RCT_EXPORT_METHOD(qrDispose:(NSString *)qrString clientId:(NSString *)clientId){
 }
 
 #pragma mark 获取用户信息
-RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId){
+RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
+    self.callBack = callback;
     [self.signer bjcaUserInfo:clientId];
 }
 
 
 #pragma mark 打开证书详情页
-RCT_EXPORT_METHOD(showCertView:(NSString *)clientId){
+RCT_EXPORT_METHOD(showCertView:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
     [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
 }
 
-#pragma mark 获取当前环境地址
-RCT_EXPORT_METHOD(getCurAddress:(NSString *)clientId){
-    NSString *address = [BjcaSignManager bjcaAddress];
-}
+//#pragma mark 获取当前环境地址
+//RCT_EXPORT_METHOD(getCurAddress:(NSString *)clientId){
+//    NSString *address = [BjcaSignManager bjcaAddress];
+//}
 
 #pragma mark 是否存在证书
-RCT_EXPORT_METHOD(existsCert){
+RCT_EXPORT_METHOD(existsCert:(RCTResponseSenderBlock)callback){
     BOOL cert = [BjcaSignManager bjcaExistsCert];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    [array addObject:[NSNumber numberWithBool:cert]];
+    if (callback) {
+        callback(array);
+    }
 }
 
 #pragma mark 环境设置
@@ -151,14 +158,20 @@ RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType){
 
 #pragma mark 清除证书
 RCT_EXPORT_METHOD(clearCert){
-    
+    [BjcaSignManager bjcaRemoveCert];
 }
 
 
 
 #pragma mark 获取sdk版本号
-RCT_EXPORT_METHOD(getVersion){
+RCT_EXPORT_METHOD(getVersion:(RCTResponseSenderBlock)callback){
+    NSString *version = [BjcaSignManager bjcaVersion];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
     
+    [array addObject:version];
+    if(callback){
+        callback(array);
+    }
 }
 
 

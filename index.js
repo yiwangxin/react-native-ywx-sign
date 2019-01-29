@@ -95,7 +95,6 @@ const SignManager = {
          * @param clientId
          * @param callback
          *
-         * * @note 这个有必要加callback吗
          */
         showCertView: function (clientId, callback) {
             SignModule.showCertView(clientId, (result) => {
@@ -124,12 +123,10 @@ const SignManager = {
         },
         /**
          * 清除本地证书
-         * @param callback
          *
-         * * @note 这个有必要加callback吗
          */
-        clearCert: function (callback) {
-            SignModule.clearCert(callback);
+        clearCert: function () {
+            SignModule.clearCert();
         },
         /**
          * 开启免密
@@ -151,13 +148,9 @@ const SignManager = {
         },
         /**
          * 取消免密
-         * @param callback
          */
-        clearPin: function (callback) {
-            SignModule.clearPin((result) => {
-                console.log(result)
-                this.callbackJson(callback,result);;
-            });
+        clearPin: function () {
+            SignModule.clearPin();
         },
         /**
          * 二维码业务处理

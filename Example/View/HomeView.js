@@ -169,10 +169,8 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                            SignModule.clearPin((response) => {
-                                console.log(response)
-                                alert("状态码：" + response.status + "message：" + response.message)
-                            })
+                            SignModule.clearPin()
+                            alert("清除完毕")
                         }}
                         touchText="关闭免密签名"
                     />
@@ -188,6 +186,9 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.getCertInfo(this.state.clientId,(response) => {
+                                alert("状态码：" + response.status + "message：" + response.message)
+                            })
                         }}
                         touchText="获取用户信息"
                     />
@@ -195,48 +196,44 @@ export class HomeView extends Component {
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.showCertView(this.state.clientId,(response) => {
+
+                            })
                         }}
                         touchText="证书详情页"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                        }}
-                        touchText="获取用户信息"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
-                        }}
-                        touchText="获取用户信息"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
+                            SignModule.existsCert((response) => {
+                                if (response) {
+                                    alert("存在")
+                                } else {
+                                    alert("不存在")
+                                }
+                            })
                         }}
                         touchText="本地是否存在证书"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
+                            SignModule.clearCert();
                         }}
                         touchText="清除本地证书"
                     />
+
                     <SZYXButton
                         touchStyle={HomeViewStyles.buttonStyle}
                         touchTextStyle={HomeViewStyles.buttonTextStyle}
                         touchClick={() => {
-                        }}
-                        touchText="清除密码"
-                    />
-                    <SZYXButton
-                        touchStyle={HomeViewStyles.buttonStyle}
-                        touchTextStyle={HomeViewStyles.buttonTextStyle}
-                        touchClick={() => {
+                            SignModule.getVersion((result)=>{
+                                alert(result)
+                            });
                         }}
                         touchText="获取当前版本号"
                     />
