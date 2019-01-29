@@ -19,11 +19,12 @@
 //lazy
 - (BjcaSignManager *)signer{
     if (_signer) {
-        //设置默认环境
         _signer.bjcaSignDelegate = self;
         return _signer;
     }
     _signer = [BjcaSignManager bjcaShareBjcaSignManager];
+    //设置默认环境
+    [BjcaSignManager bjcaSetServerURL:BjcaDev];
     _signer.bjcaSignDelegate = self;
     
     return _signer;
@@ -44,56 +45,75 @@ RCT_EXPORT_MODULE(SignModule)
 
 #pragma mark 证书下载
 RCT_EXPORT_METHOD(certDown:(NSString *)clientId phone:(NSString *)phone completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaCertDown:clientId phoneNum:phone curViewCtrl:ctrl];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaCertDown:clientId phoneNum:phone curViewCtrl:ctrl];
+    });
 }
 
 #pragma mark 证书更新
 RCT_EXPORT_METHOD(certUpdate:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaCertUpdate:clientId curViewCtrl:ctrl];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaCertUpdate:clientId curViewCtrl:ctrl];
+    });
 }
 
 #pragma mark 证书密码重置
 RCT_EXPORT_METHOD(certResetPin:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaCertReset:clientId curViewCtrl:ctrl];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaCertReset:clientId curViewCtrl:ctrl];
+    });
 }
 
 #pragma mark 签章设置
 RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaSetStamp:clientId curViewCtrl:ctrl navColor:[UIColor redColor] navFontColor:[UIColor whiteColor]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaSetStamp:clientId curViewCtrl:ctrl navColor:[UIColor redColor] navFontColor:[UIColor whiteColor]];
+    });
 }
 
 
 #pragma mark 批量签名
-RCT_EXPORT_METHOD(sign:(NSMutableArray *)uniqueIds clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaBatchSignList:uniqueIds userClientId:clientId curViewCtrl:ctrl];
+RCT_EXPORT_METHOD(sign:(NSArray *)uniqueIds clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        NSMutableArray *array = [NSMutableArray arrayWithArray:uniqueIds];
+        [self.signer bjcaBatchSignList:array userClientId:clientId curViewCtrl:ctrl];
+    });
 }
 
 #pragma mark 免密签名开启
-RCT_EXPORT_METHOD(keepPin:(int)day clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack = callback;
-    [self.signer bjcaFreePinSign:day clientId:clientId curViewCtrl:ctrl];
+RCT_EXPORT_METHOD(keepPin:(NSString *)clientId day:(NSString *)day completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaFreePinSign:[day intValue] clientId:clientId curViewCtrl:ctrl];
+    });
 }
 
 #pragma mark 当前是否处于免密状态
-RCT_EXPORT_METHOD(isPinExempt){
+RCT_EXPORT_METHOD(isPinExempt:(RCTResponseSenderBlock)callback){
+    BOOL isPin = [BjcaSignManager bjcaExistsFreePin];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    [array addObject:[NSNumber numberWithBool:isPin]];
+    if (callback) {
+        callback(array);
+    }
     
 }
 
 #pragma mark 关闭免密
 RCT_EXPORT_METHOD(clearPin){
-    
+    [BjcaSignManager bjcaRemovePin];
 }
 
 #pragma mark 二维码解析
@@ -138,7 +158,7 @@ RCT_EXPORT_METHOD(clearCert){
 
 #pragma mark 获取sdk版本号
 RCT_EXPORT_METHOD(getVersion){
-
+    
 }
 
 

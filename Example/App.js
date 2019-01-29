@@ -11,10 +11,14 @@ import {SZYXButton} from "./Component/SZYXButton";
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {createAppContainer,createStackNavigator} from "react-navigation"
 import {HomeView} from "./View/HomeView";
+import {BatchView} from "./View/BatchView";
 
 const AppNav = createStackNavigator({
     HomeView:{
         screen:HomeView
+    },
+    BatchView:{
+        screen: BatchView
     }
 })
 
