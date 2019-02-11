@@ -41,5 +41,9 @@ typedef NS_ENUM(NSInteger,BjcaBusinessType) {
     BjcaBusinessUserInfo,
 //    查看证书详情
     BjcaBusinessCertDetail,
+//    开启指纹
+    BjcaBusinessFingerPin,
+//    关闭指纹
+    BjcaBusinessFingerPinClose,
 };
 #endif /* BjcaPublicConst_h */

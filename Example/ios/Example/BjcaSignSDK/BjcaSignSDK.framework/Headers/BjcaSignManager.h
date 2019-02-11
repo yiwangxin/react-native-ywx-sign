@@ -86,6 +86,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)bjcaBatchSignList:(NSMutableArray *)uniqueIds userClientId:(NSString *)clientId curViewCtrl:(UIViewController*)viewCtrl;
 
+/**
+ 开启指纹签名
+ */
+- (void)bjcaFingerSign:(UIViewController*)viewCtrl;
+
+/**
+ 关闭指纹签名
+ */
+- (void)bjcaFingerSignClose:(UIViewController*)viewCtrl;
 
 /**
  二维码扫码字符串签名
