@@ -135,10 +135,9 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void clearCert(final Callback callback) {
+    public void clearCert() {
         mActivity = getCurrentActivity();
         String openId = BJCASDK.getInstance().clearCert(mActivity);
-        callback.invoke(openId);
     }
 
 
@@ -161,10 +160,9 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void clearPin(final Callback callback) {
+    public void clearPin() {
         mActivity = getCurrentActivity();
         boolean success = BJCASDK.getInstance().clearPin(mActivity);
-        callback.invoke(success);
     }
 
 
