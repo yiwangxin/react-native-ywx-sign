@@ -152,7 +152,8 @@ RCT_EXPORT_METHOD(existsCert:(RCTResponseSenderBlock)callback){
 }
 
 #pragma mark 环境设置
-RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType){
+RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType completion:(RCTResponseSenderBlock)callback){
+//    对安卓的兼容保留callback
     [BjcaSignManager bjcaSetServerURL:[severType intValue]];
 }
 
