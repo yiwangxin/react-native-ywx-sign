@@ -169,14 +169,15 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
         mActivity = getCurrentActivity();
-        List list = uniqueIdList.toArrayList();
-        BJCASDK.getInstance().sign(mActivity, clientId, list, new YWXListener() {
-            @Override
-            public void callback(String s) {
-                invokeJsonCallback(callback, s);
-            }
-        });
-
+        if (uniqueIdList != null) {
+            List list = uniqueIdList.toArrayList();
+            BJCASDK.getInstance().sign(mActivity, clientId, list, new YWXListener() {
+                @Override
+                public void callback(String s) {
+                    invokeJsonCallback(callback, s);
+                }
+            });
+        }
     }
 
 
@@ -213,20 +214,21 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     /**
      * 修改指纹签名
+     *
      * @param fingerSignState
      * @param callback
      */
     @ReactMethod
     public void alterFingerSignState(int fingerSignState, final Callback callback) {
         mActivity = getCurrentActivity();
-        FingerSignState state =null;
+        FingerSignState state = null;
         try {
             state = FingerSignState.values()[fingerSignState];
         } catch (IndexOutOfBoundsException ex) {
             Logs.e(ex);
             throw ex;
         }
-        BJCASDK.getInstance().alterFingerSignState(mActivity,state, new YWXListener() {
+        BJCASDK.getInstance().alterFingerSignState(mActivity, state, new YWXListener() {
             @Override
             public void callback(String s) {
                 invokeJsonCallback(callback, s);
@@ -234,6 +236,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         });
 
     }
+
     @ReactMethod
     public void getFingerSignState(final Callback callback) {
         mActivity = getCurrentActivity();
@@ -256,7 +259,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         return constants;
     }
 
-    private void invokeJsonCallback(Callback callback,String jsonStr) {
+    private void invokeJsonCallback(Callback callback, String jsonStr) {
         callback.invoke(jsonStr);
     }
 }
