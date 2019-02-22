@@ -15,6 +15,11 @@ const SignManager = {
             dev: SignModule.BjcaDev,      //开发环境
         },
 
+        certEnvType:{
+            doctor:SignModule.BjcaCertDoctor,
+            mass:SignModule.BjcaCertMass
+        },
+
         /** 指纹*/
         fingerSignState: {
             on: SignModule.BjcaFingerSignOn, //指纹签名开启
@@ -211,6 +216,10 @@ const SignManager = {
             SignModule.getFingerSignState(fingerSignState => {
                 callback && callback(fingerSignState)
             })
+        },
+
+        initCertEnvType:function (certEnvType){
+            SignModule.initCertEnvType(certEnvType);
         }
     }
 ;

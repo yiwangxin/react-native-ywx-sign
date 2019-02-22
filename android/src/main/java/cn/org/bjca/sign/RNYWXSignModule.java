@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import cn.org.bjca.sdk.core.bean.FingerSignState;
+import cn.org.bjca.sdk.core.inner.activity.CertActivity;
+import cn.org.bjca.sdk.core.inner.values.CertEnvType;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
 import cn.org.bjca.sdk.core.kit.YWXListener;
 import cn.org.bjca.sdk.core.utils.Logs;
@@ -244,6 +246,21 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         callback.invoke(fingerSignState.ordinal());
     }
 
+    /**
+     * 重新初始化证书用户类型   0-医师用户  1-公众用户
+     * @param certEnvIndex
+     */
+    @ReactMethod
+    public void initCertEnvType(int certEnvIndex){
+        CertEnvType envType =CertEnvType.DOCTOR;
+        int length = EnvType.values().length;
+        if (certEnvIndex >= 0 && certEnvIndex < length) {
+            envType = CertEnvType.values()[certEnvIndex];
+        }
+        BJCASDK.getInstance().initCertEnvType(envType);
+//        callback.invoke(serverUrl);
+    }
+
 
     @Nullable
     @Override
@@ -253,6 +270,11 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         constants.put("BjcaIntegrate", EnvType.INTEGRATE.ordinal());
         constants.put("BjcaTest", EnvType.TEST_DOMAIN.ordinal());
         constants.put("BjcaDev", EnvType.DEV_DOMAIN.ordinal());
+
+
+        constants.put("BjcaCertDoctor", CertEnvType.DOCTOR.ordinal());
+        constants.put("BjcaCertMass", CertEnvType.MASS.ordinal());
+
 
         constants.put("BjcaFingerSignOn", FingerSignState.on.ordinal());
         constants.put("BjcaFingerSignOff", FingerSignState.off.ordinal());
