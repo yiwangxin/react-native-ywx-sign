@@ -6,7 +6,6 @@
 #import <BjcaSignSDK/BjcaSignManager.h>
 #import <BjcaSignSDK/BjcaPublicConst.h>
 #import "BjcaRNTools.h"
-
 @interface RNReactNativeYwxSign()<BjcaSignDelegate>
 
 @property (nonatomic,strong) BjcaSignManager *signer;
@@ -36,13 +35,16 @@
 }
 RCT_EXPORT_MODULE(YWXSignModule)
 
+static NSString * const BjcaCertDoctor = @"CertDoctor";
+static NSString * const BjcaCertMass = @"CertMass";
+
 - (NSDictionary *)constantsToExport {
     return @{@"BjcaPublic": @(BjcaPublic),
              @"BjcaIntegrate": @(BjcaIntegrate),
              @"BjcaDev": @(BjcaDev),
              @"BjcaTest": @(BjcaTest),
-             @"BjcaFingerSignOn": @"YES",
-             @"BjcaFingerSignOff": @"NO",
+             @"BjcaCertDoctor":BjcaCertDoctor,
+             @"BjcaCertMass":BjcaCertMass,
              };
 }
 
@@ -94,12 +96,11 @@ RCT_EXPORT_METHOD(sign:(NSArray *)uniqueIds clientId:(NSString *)clientId comple
 }
 
 #pragma mark 免密签名开启
-RCT_EXPORT_METHOD(keepPin:(NSString *)clientId day:(nonnull NSNumber *)day completion:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(keepPin:(NSString *)clientId day:(NSString *)day completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
-        int freeday = [day intValue];
-        [self.signer bjcaFreePinSign:freeday clientId:clientId curViewCtrl:ctrl];
+        [self.signer bjcaFreePinSign:[day intValue] clientId:clientId curViewCtrl:ctrl];
     });
 }
 
@@ -121,12 +122,9 @@ RCT_EXPORT_METHOD(clearPin){
 }
 
 #pragma mark 二维码解析
-RCT_EXPORT_METHOD(qrDispose:(NSString *)clientId qrString:(NSString *)qrString completion:(RCTResponseSenderBlock)callback){
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.callBack = callback;
-        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-        [self.signer bjcaQrSign:qrString userClientId:clientId curViewCtrl:ctrl];
-    });
+RCT_EXPORT_METHOD(qrDispose:(NSString *)qrString clientId:(NSString *)clientId){
+    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    [self.signer bjcaQrSign:qrString userClientId:clientId curViewCtrl:ctrl];
 }
 
 #pragma mark 获取用户信息
@@ -182,17 +180,10 @@ RCT_EXPORT_METHOD(getVersion:(RCTResponseSenderBlock)callback){
     }
 }
 
-#pragma mark 获取指纹签名状态
-RCT_EXPORT_METHOD(getFingerSignState:(RCTResponseSenderBlock)callback){
-    BOOL flag = [BjcaSignManager bjcaFingerState];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    if (flag) {
-        [array addObject:@"YES"];
-    }else{
-        [array addObject:@"NO"];
-    }
-    if(callback){
-        callback(array);
+#pragma mark 设置证书类型为公众类型证书
+RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
+    if ([certType isEqualToString:BjcaCertMass]) {
+        [BjcaSignManager performSelector:@selector(setCertTypeToMass)];
     }
 }
 

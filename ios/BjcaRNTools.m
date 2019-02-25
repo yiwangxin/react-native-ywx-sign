@@ -60,9 +60,6 @@
 
 + (UIViewController *)getCurrentVC{
      UIWindow *window = [[[UIApplication sharedApplication] windows] firstObject];
-    if([window.rootViewController isKindOfClass:[UINavigationController class]]){
-        return [window.rootViewController performSelector:@selector(topViewController) withObject:nil];
-    }
     return window.rootViewController;
 }
 
