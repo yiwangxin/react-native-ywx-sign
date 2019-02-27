@@ -88,7 +88,7 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
 
 
 #pragma mark 批量签名
-RCT_EXPORT_METHOD(sign:(NSArray *)uniqueIds clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
@@ -211,7 +211,20 @@ RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
     NSMutableArray *array = [[NSMutableArray alloc]init];
-    [array addObject:backParam];
+//    签名操作，iOS和安卓协定的sdk返回值不一致，iOS原生处理一下
+    if([backParam[@"businessType"] integerValue] == BjcaBusinessSignList){
+        NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:backParam];
+        [result removeObjectForKey:@"data"];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:backParam[@"data"]];
+        NSMutableArray *uniqueIds = dic[@"uniqueId"];
+        [dic removeObjectForKey:@"uniqueId"];
+        [dic setObject:uniqueIds forKey:@"uniqueIds"];
+        
+        [result addEntriesFromDictionary:dic];
+        [array addObject:result];
+    }else{
+        [array addObject:backParam];
+    }
     if (self.callBack) {
         self.callBack(array);
     }
