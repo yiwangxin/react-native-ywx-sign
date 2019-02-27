@@ -6,7 +6,6 @@
 #import <BjcaSignSDK/BjcaSignManager.h>
 #import <BjcaSignSDK/BjcaPublicConst.h>
 #import "BjcaRNTools.h"
-
 @interface RNReactNativeYwxSign()<BjcaSignDelegate>
 
 @property (nonatomic,strong) BjcaSignManager *signer;
@@ -36,6 +35,9 @@
 }
 RCT_EXPORT_MODULE(YWXSignModule)
 
+static NSString * const BjcaCertDoctor = @"CertDoctor";
+static NSString * const BjcaCertMass = @"CertMass";
+
 - (NSDictionary *)constantsToExport {
     return @{@"BjcaPublic": @(BjcaPublic),
              @"BjcaIntegrate": @(BjcaIntegrate),
@@ -43,6 +45,8 @@ RCT_EXPORT_MODULE(YWXSignModule)
              @"BjcaTest": @(BjcaTest),
              @"BjcaFingerSignOn": @"YES",
              @"BjcaFingerSignOff": @"NO",
+             @"BjcaCertDoctor":BjcaCertDoctor,
+             @"BjcaCertMass":BjcaCertMass,
              };
 }
 
@@ -84,7 +88,7 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
 
 
 #pragma mark 批量签名
-RCT_EXPORT_METHOD(sign:(NSArray *)uniqueIds clientId:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
@@ -98,10 +102,10 @@ RCT_EXPORT_METHOD(keepPin:(NSString *)clientId day:(nonnull NSNumber *)day compl
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
-        int freeday = [day intValue];
-        [self.signer bjcaFreePinSign:freeday clientId:clientId curViewCtrl:ctrl];
+        [self.signer bjcaFreePinSign:[day intValue] clientId:clientId curViewCtrl:ctrl];
     });
 }
+
 
 #pragma mark 当前是否处于免密状态
 RCT_EXPORT_METHOD(isPinExempt:(RCTResponseSenderBlock)callback){
@@ -196,11 +200,31 @@ RCT_EXPORT_METHOD(getFingerSignState:(RCTResponseSenderBlock)callback){
     }
 }
 
+#pragma mark 设置证书类型为公众类型证书
+RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
+    if ([certType isEqualToString:BjcaCertMass]) {
+        [BjcaSignManager performSelector:@selector(setCertTypeToMass)];
+    }
+}
+
 
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
     NSMutableArray *array = [[NSMutableArray alloc]init];
-    [array addObject:backParam];
+//    签名操作，iOS和安卓协定的sdk返回值不一致，iOS原生处理一下
+    if([backParam[@"businessType"] integerValue] == BjcaBusinessSignList){
+        NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:backParam];
+        [result removeObjectForKey:@"data"];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:backParam[@"data"]];
+        NSMutableArray *uniqueIds = dic[@"uniqueId"];
+        [dic removeObjectForKey:@"uniqueId"];
+        [dic setObject:uniqueIds forKey:@"uniqueIds"];
+        
+        [result addEntriesFromDictionary:dic];
+        [array addObject:result];
+    }else{
+        [array addObject:backParam];
+    }
     if (self.callBack) {
         self.callBack(array);
     }
