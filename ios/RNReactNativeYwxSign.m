@@ -23,8 +23,6 @@
         return _signer;
     }
     _signer = [BjcaSignManager bjcaShareBjcaSignManager];
-    //设置默认环境
-    [BjcaSignManager bjcaSetServerURL:BjcaDev];
     _signer.bjcaSignDelegate = self;
     
     return _signer;
@@ -211,8 +209,10 @@ RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
     NSMutableArray *array = [[NSMutableArray alloc]init];
-//    签名操作，iOS和安卓协定的sdk返回值不一致，iOS原生处理一下
-    if([backParam[@"businessType"] integerValue] == BjcaBusinessSignList){
+    //    签名操作，iOS和安卓协定的sdk返回值不一致，iOS原生处理一下
+    //    如果成功
+    if([backParam[@"status"] isEqualToString:@"0"] && [backParam[@"businessType"] integerValue] == BjcaBusinessSignList){
+        
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:backParam];
         [result removeObjectForKey:@"data"];
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:backParam[@"data"]];
@@ -225,6 +225,7 @@ RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
     }else{
         [array addObject:backParam];
     }
+    
     if (self.callBack) {
         self.callBack(array);
     }
