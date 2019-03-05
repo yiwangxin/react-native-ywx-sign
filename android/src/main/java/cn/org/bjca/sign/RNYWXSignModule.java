@@ -28,7 +28,6 @@ import cn.org.bjca.sdk.core.inner.activity.CertActivity;
 import cn.org.bjca.sdk.core.inner.values.CertEnvType;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
 import cn.org.bjca.sdk.core.kit.YWXListener;
-import cn.org.bjca.sdk.core.utils.Logs;
 import cn.org.bjca.sdk.core.values.EnvType;
 
 /*************************************************************************************************
@@ -181,6 +180,19 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             });
         }
     }
+    @ReactMethod
+    public void signForTeam(String clientId, ReadableArray uniqueIdList, final Callback callback) {
+        mActivity = getCurrentActivity();
+        if (uniqueIdList != null) {
+            List list = uniqueIdList.toArrayList();
+            BJCASDK.getInstance().signForTeam(mActivity, clientId, list, new YWXListener() {
+                @Override
+                public void callback(String s) {
+                    invokeJsonCallback(callback, s);
+                }
+            });
+        }
+    }
 
 
     @ReactMethod
@@ -213,7 +225,6 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         callback.invoke(serverUrl);
     }
 
-
     /**
      * 修改指纹签名
      *
@@ -227,7 +238,6 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         try {
             state = FingerSignState.values()[fingerSignState];
         } catch (IndexOutOfBoundsException ex) {
-            Logs.e(ex);
             throw ex;
         }
         BJCASDK.getInstance().alterFingerSignState(mActivity, state, new YWXListener() {

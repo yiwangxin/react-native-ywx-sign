@@ -193,6 +193,17 @@ const SignManager = {
                 this.callbackJson(callback, result);
             });
         },
+        /**
+         * 签名操作——协同办公
+         * @param clientId
+         * @param uniqueIdList  待签列表的uniqueId列表
+         * @param callback
+         */
+        signForTeam: function (clientId, uniqueIdList, callback) {
+            SignModule.signForTeam(clientId, uniqueIdList, (result) => {
+                this.callbackJson(callback, result);
+            });
+        },
 
         /**
          * 修改指纹签名状态
