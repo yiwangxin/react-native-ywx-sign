@@ -1,8 +1,7 @@
 
 #import "RNReactNativeYwxSign.h"
 #import <UIKit/UIKit.h>
-//#import "BjcaSignManager.h"
-//#import "BjcaPublicConst.h"
+//#import <>
 #import <BjcaSignSDK/BjcaSignManager.h>
 #import <BjcaSignSDK/BjcaPublicConst.h>
 #import "BjcaRNTools.h"
@@ -92,6 +91,20 @@ RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds compl
         self.callBack = callback;
         NSMutableArray *array = [NSMutableArray arrayWithArray:uniqueIds];
         [self.signer bjcaBatchSignList:array userClientId:clientId curViewCtrl:ctrl];
+    });
+}
+
+#pragma mark 协同签名
+RCT_EXPORT_METHOD(signForTeam:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        NSMutableArray *array = [NSMutableArray arrayWithArray:uniqueIds];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+        [dic setObject:clientId forKey:@"clientId"];
+        [dic setObject:array forKey:@"uniqueIds"];
+        [dic setObject:ctrl forKey:@"ctrl"];
+        [self.signer performSelector:@selector(bjcaTeamSign:) withObject:dic];
     });
 }
 
