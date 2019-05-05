@@ -134,6 +134,15 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         });
     }
 
+    /**
+     * 获取签章图片
+     */
+    public void getStampPic(final Callback callback) {
+        mActivity = getCurrentActivity();
+        String stampPic = BJCASDK.getInstance().getStampPic(mActivity);
+        callback.invoke(stampPic);
+    }
+
 
     @ReactMethod
     public void clearCert() {
@@ -180,6 +189,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             });
         }
     }
+
     @ReactMethod
     public void signForTeam(String clientId, ReadableArray uniqueIdList, final Callback callback) {
         mActivity = getCurrentActivity();
@@ -258,11 +268,12 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     /**
      * 重新初始化证书用户类型   0-医师用户  1-公众用户
+     *
      * @param certEnvIndex
      */
     @ReactMethod
-    public void initCertEnvType(int certEnvIndex){
-        CertEnvType envType =CertEnvType.DOCTOR;
+    public void initCertEnvType(int certEnvIndex) {
+        CertEnvType envType = CertEnvType.DOCTOR;
         int length = EnvType.values().length;
         if (certEnvIndex >= 0 && certEnvIndex < length) {
             envType = CertEnvType.values()[certEnvIndex];
@@ -285,9 +296,10 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         constants.put("BjcaCertDoctor", CertEnvType.DOCTOR.ordinal());
         constants.put("BjcaCertMass", CertEnvType.MASS.ordinal());
 
-
         constants.put("BjcaFingerSignOn", FingerSignState.on.ordinal());
         constants.put("BjcaFingerSignOff", FingerSignState.off.ordinal());
+
+        constants.put("BJCAVersion", BJCASDK.getInstance().getVersion());
         return constants;
     }
 

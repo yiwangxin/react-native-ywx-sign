@@ -261,7 +261,7 @@ export class HomeView extends Component {
 
 }
 
-let HomeViewStyles = StyleSheet.create({
+const HomeViewStyles = StyleSheet.create({
     scrollStyle: {
         flex: 1,
     },
