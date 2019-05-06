@@ -120,7 +120,6 @@ class _SignManager {
         });
     }
 
-,
 
     /**
      * 修改手写签名

@@ -218,6 +218,23 @@ RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
     }
 }
 
+#pragma mark 开启指纹签名状态
+RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseSenderBlock)callback){
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.callBack = callback;
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        if ([fingerSignState isEqualToString:@"YES"])
+        {
+            [self.signer bjcaFingerSign: ctrl];
+        }
+        else
+        {
+            [self.signer bjcaFingerSignClose:ctrl];
+        }
+    });
+}
 
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
