@@ -83,6 +83,23 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
     });
 }
 
+#pragma mark 获取签章图片
+RCT_EXPORT_METHOD(getStampPic:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSString*pic=[BjcaSignManager bjcaStampPic];
+        
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        
+        [array addObject:pic];
+        
+        if(callback){
+            callback(array);
+        }
+        
+    });
+}
+
 
 #pragma mark 批量签名
 RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
@@ -154,7 +171,9 @@ RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId completion:(RCTResponseSender
 #pragma mark 打开证书详情页
 RCT_EXPORT_METHOD(showCertView:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack=callback;
     [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
+    
 }
 
 //#pragma mark 获取当前环境地址
@@ -210,6 +229,7 @@ RCT_EXPORT_METHOD(getFingerSignState:(RCTResponseSenderBlock)callback){
         callback(array);
     }
 }
+
 
 #pragma mark 设置证书类型为公众类型证书
 RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
