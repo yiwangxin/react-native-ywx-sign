@@ -2,6 +2,7 @@ package cn.org.bjca.sign;
 
 import android.app.Activity;
 import android.content.Context;
+import android.telecom.Call;
 import android.text.TextUtils;
 import android.util.JsonReader;
 import android.util.Log;
@@ -178,13 +179,19 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
+
+        final String callbackKey = CallbackHelper.sign;
+        if (CallbackHelper.checkCallback(callbackKey, callback)) {
+            return;
+        }
         mActivity = getCurrentActivity();
+
         if (uniqueIdList != null) {
             List list = uniqueIdList.toArrayList();
             BJCASDK.getInstance().sign(mActivity, clientId, list, new YWXListener() {
                 @Override
                 public void callback(String s) {
-                    invokeJsonCallback(callback, s);
+                    CallbackHelper.invoke(callbackKey, s);
                 }
             });
         }
@@ -192,13 +199,19 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void signForTeam(String clientId, ReadableArray uniqueIdList, final Callback callback) {
+
+        final String callbackKey = CallbackHelper.signForTeam;
+        if (CallbackHelper.checkCallback(callbackKey, callback)) {
+            return;
+        }
+
         mActivity = getCurrentActivity();
         if (uniqueIdList != null) {
             List list = uniqueIdList.toArrayList();
             BJCASDK.getInstance().signForTeam(mActivity, clientId, list, new YWXListener() {
                 @Override
                 public void callback(String s) {
-                    invokeJsonCallback(callback, s);
+                    CallbackHelper.invoke(callbackKey, s);
                 }
             });
         }
@@ -306,4 +319,59 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     private void invokeJsonCallback(Callback callback, String jsonStr) {
         callback.invoke(jsonStr);
     }
+
+
+    private final static class CallbackHelper {
+
+        private static Map<String, Callback> mCallbackMap = new HashMap<>();
+
+        final static String sign = "sign";
+        final static String signForTeam = "signForTeam";
+
+        static boolean checkCallback(String key, Callback callback) {
+            boolean hasCallback = hasCallback(key);
+            if (!hasCallback) {
+                putCallback(key, callback);
+            } else {
+                invokeWorking(callback);
+            }
+            return hasCallback;
+        }
+
+        static boolean hasCallback(String key) {
+            return mCallbackMap.get(key) != null;
+        }
+
+        static Callback getCallback(String key) {
+            Callback callback = mCallbackMap.get(key);
+            if (callback != null) {
+                mCallbackMap.remove(key);
+            }
+            return callback;
+        }
+
+        static void putCallback(String key, Callback callback) {
+            mCallbackMap.put(key, callback);
+        }
+
+        static void invokeWorking(Callback callback) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("status", "9000");
+                jsonObject.put("message", "当前任务正在进行，请稍后再试～");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            callback.invoke(jsonObject.toString());
+        }
+
+        static void invoke(String key, String json) {
+            Callback callback = getCallback(key);
+            if (callback != null) {
+                callback.invoke(json);
+                mCallbackMap.remove(key);
+            }
+        }
+    }
+
 }
