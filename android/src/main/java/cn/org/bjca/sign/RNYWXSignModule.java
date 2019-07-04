@@ -138,6 +138,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     /**
      * 获取签章图片
      */
+    @ReactMethod
     public void getStampPic(final Callback callback) {
         mActivity = getCurrentActivity();
         String stampPic = BJCASDK.getInstance().getStampPic(mActivity);
