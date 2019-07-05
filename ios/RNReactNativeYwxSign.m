@@ -83,6 +83,17 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
     });
 }
 
+#pragma mark 获取签章图片
+RCT_EXPORT_METHOD(getStampPic:(RCTResponseSenderBlock)callback){
+    NSString* pic = [BjcaSignManager bjcaStampPic];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    [array addObject:pic];
+    if (callback) {
+        callback(array);
+    }
+    
+}
 
 #pragma mark 批量签名
 RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
@@ -154,6 +165,7 @@ RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId completion:(RCTResponseSender
 #pragma mark 打开证书详情页
 RCT_EXPORT_METHOD(showCertView:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+    self.callBack=callback;
     [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
 }
 
@@ -175,7 +187,7 @@ RCT_EXPORT_METHOD(existsCert:(RCTResponseSenderBlock)callback){
 
 #pragma mark 环境设置
 RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType completion:(RCTResponseSenderBlock)callback){
-//    对安卓的兼容保留callback
+    //    对安卓的兼容保留callback
     [BjcaSignManager bjcaSetServerURL:[severType intValue]];
 }
 
@@ -261,3 +273,5 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
     }
 }
 @end
+
+
