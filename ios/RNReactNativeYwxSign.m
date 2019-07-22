@@ -85,13 +85,24 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
 
 #pragma mark 获取签章图片
 RCT_EXPORT_METHOD(getStampPic:(RCTResponseSenderBlock)callback){
-    NSString* pic = [BjcaSignManager bjcaStampPic];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
+  
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        NSString* pic = [BjcaSignManager bjcaStampPic];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        
+        if (pic)
+        {
+          [array addObject:pic];
+        }
+        
+        if (callback) {
+            callback(array);
+        }
+        
+    });
     
-    [array addObject:pic];
-    if (callback) {
-        callback(array);
-    }
+
     
 }
 
@@ -211,23 +222,38 @@ RCT_EXPORT_METHOD(getVersion:(RCTResponseSenderBlock)callback){
 
 #pragma mark 获取指纹签名状态
 RCT_EXPORT_METHOD(getFingerSignState:(RCTResponseSenderBlock)callback){
-    BOOL flag = [BjcaSignManager bjcaFingerState];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    if (flag) {
-        [array addObject:@"YES"];
-    }else{
-        [array addObject:@"NO"];
-    }
-    if(callback){
-        callback(array);
-    }
+   
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+        BOOL flag = [BjcaSignManager bjcaFingerState];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        if (flag) {
+            [array addObject:@"YES"];
+        }else{
+            [array addObject:@"NO"];
+        }
+        if(callback){
+            callback(array);
+        }
+    });
+    
 }
 
 #pragma mark 设置证书类型为公众类型证书
 RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
-    if ([certType isEqualToString:BjcaCertMass]) {
-        [BjcaSignManager performSelector:@selector(setCertTypeToMass)];
-    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+        if ([certType isEqualToString:BjcaCertMass]) {
+            [BjcaSignManager performSelector:@selector(setCertTypeToMass)];
+        }else{
+            
+            [BjcaSignManager performSelector:@selector(setCertTypeToDoctor)];
+        }
+        
+    });
+    
+    
 }
 
 #pragma mark 开启指纹签名状态
