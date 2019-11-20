@@ -10,14 +10,17 @@ import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.JsonWriter;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.module.annotations.ReactModule;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +28,20 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import cn.org.bjca.sdk.core.bean.FingerSignState;
+import cn.org.bjca.sdk.core.bean.ResultBean;
 import cn.org.bjca.sdk.core.inner.activity.CertActivity;
+import cn.org.bjca.sdk.core.inner.bean.SignP1Bean;
+import cn.org.bjca.sdk.core.inner.listener.ISignetSign;
+import cn.org.bjca.sdk.core.inner.manage.SignetSignManage;
 import cn.org.bjca.sdk.core.inner.values.CertEnvType;
+import cn.org.bjca.sdk.core.inner.values.SignetCode;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
 import cn.org.bjca.sdk.core.kit.YWXListener;
+import cn.org.bjca.sdk.core.manage.SignetManager;
+import cn.org.bjca.sdk.core.values.ConstantParams;
 import cn.org.bjca.sdk.core.values.EnvType;
+import cn.org.bjca.signet.component.core.bean.params.SignDataInfos;
+import cn.org.bjca.signet.component.core.bean.results.SignDataPinResult;
 
 /*************************************************************************************************
  * <pre>
@@ -293,7 +305,54 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             envType = CertEnvType.values()[certEnvIndex];
         }
         BJCASDK.getInstance().initCertEnvType(envType);
-//        callback.invoke(serverUrl);
+    }
+
+    @ReactMethod
+    public void signBySignet(String signId, final Callback callback) {
+//        final String callbackKey = CallbackHelper.sign;
+//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
+//            return;
+//        }
+        mActivity = getCurrentActivity();
+        SignetSignManage.signBySignet(getCurrentActivity(), signId, new ISignetSign() {
+            @Override
+            public void signDataWithPinCallBack(SignDataPinResult signDataResult) {
+                signetSignBack(signDataResult, callback);
+            }
+
+            @Override
+            public void signDataPinResult(SignDataPinResult signDataResult) {
+                signetSignBack(signDataResult, callback);
+
+            }
+        });
+    }
+
+    private void signetSignBack(SignDataPinResult signDataResult, Callback callback) {
+        SignResultBean signResultBean = new SignResultBean();
+        signResultBean.setStatus(signDataResult.getErrCode());
+        signResultBean.setMessage(signDataResult.getErrMsg());
+
+        if (TextUtils.equals(signDataResult.getErrCode(), SignetCode.SUCCESS)) {
+            signResultBean.setStatus(ConstantParams.SUCCESS);
+            signResultBean.setSignId(signDataResult.getSignDataJobId());
+
+            List<SignDataInfos> list = signDataResult.getSignDataInfos();
+            List signP1List = new ArrayList();
+            for (int i = 0; i < list.size(); i++) {
+                SignResultBean.SignedBean signP1Bean = new SignResultBean.SignedBean();
+
+                signP1Bean.setUniqueId(list.get(i).getBusinessId());
+                signP1Bean.setSignP1Data(list.get(i).getSignature());
+                signP1List.add(signP1Bean);
+            }
+            signResultBean.setSignedList(signP1List);
+        }
+
+        final String callbackKey = CallbackHelper.signForTeam;
+//        CallbackHelper.invoke(callbackKey,jsonObject.toString());
+        invokeJsonCallback(callback, signResultBean.toJson());
+
     }
 
 
@@ -327,6 +386,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         private static Map<String, Callback> mCallbackMap = new HashMap<>();
 
         final static String sign = "sign";
+        final static String signBySignet = "signBySignet";
         final static String signForTeam = "signForTeam";
 
         static boolean checkCallback(String key, Callback callback) {

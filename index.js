@@ -250,6 +250,12 @@ class _SignManager {
     initCertEnvType(certEnvType) {
         SignModule.initCertEnvType(certEnvType);
     }
+
+    signBySignet(signId, callback) {
+        SignModule.signBySignet(signId, result => {
+            this.callbackJson(callback, result);
+        })
+    }
 }
 
 const SignManager = new _SignManager()
