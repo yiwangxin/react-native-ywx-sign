@@ -391,11 +391,13 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
         static boolean checkCallback(String key, Callback callback) {
             boolean hasCallback = hasCallback(key);
-            if (!hasCallback) {
-                putCallback(key, callback);
-            } else {
-                invokeWorking(callback);
-            }
+            putCallback(key, callback);
+//            if (!hasCallback) {
+//                putCallback(key, callback);
+//            }
+//            else {
+//                invokeWorking(callback);
+//            }
             return hasCallback;
         }
 
