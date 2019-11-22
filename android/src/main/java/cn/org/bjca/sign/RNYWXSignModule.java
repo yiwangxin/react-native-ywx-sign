@@ -194,9 +194,9 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
 
         final String callbackKey = CallbackHelper.sign;
-        if (CallbackHelper.checkCallback(callbackKey, callback)) {
-            return;
-        }
+//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
+//            return;
+//        }
         mActivity = getCurrentActivity();
 
         if (uniqueIdList != null) {
@@ -214,9 +214,9 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void signForTeam(String clientId, ReadableArray uniqueIdList, final Callback callback) {
 
         final String callbackKey = CallbackHelper.signForTeam;
-        if (CallbackHelper.checkCallback(callbackKey, callback)) {
-            return;
-        }
+//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
+//            return;
+//        }
 
         mActivity = getCurrentActivity();
         if (uniqueIdList != null) {
