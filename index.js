@@ -250,6 +250,24 @@ class _SignManager {
     initCertEnvType(certEnvType) {
         SignModule.initCertEnvType(certEnvType);
     }
+
+    /**
+     * 根据信步云签名流水号进行签名
+     * @param signId
+     * @param callback
+     * result的格式
+     * {
+        "status":"0",
+        "message":"操作成功",
+        "signId":"11231231231signId",
+        "signedList":[{"uniqueId":"21312312312","signP1Data":"djaksljfldsajfds"}]
+        }
+     */
+    signBySignet(signId, callback) {
+        SignModule.signBySignet(signId, result => {
+            this.callbackJson(callback, result);
+        })
+    }
 }
 
 const SignManager = new _SignManager()
