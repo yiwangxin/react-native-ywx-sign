@@ -116,6 +116,16 @@ RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds compl
     });
 }
 
+#pragma mark  根据签名流水号签名
+RCT_EXPORT_METHOD(signBySignet:(NSString *)signId completion:(RCTResponseSenderBlock)callback){
+   
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaBatchSignId:signId curViewCtrl:ctrl];
+    });
+}
+
 #pragma mark 协同签名
 RCT_EXPORT_METHOD(signForTeam:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -262,7 +272,7 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
     dispatch_async(dispatch_get_main_queue(), ^{
         self.callBack = callback;
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-        NSMutableArray *array = [[NSMutableArray alloc]init];
+    
         if ([fingerSignState isEqualToString:@"YES"])
         {
             [self.signer bjcaFingerSign: ctrl];
@@ -290,6 +300,25 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
         
         [result addEntriesFromDictionary:dic];
         [array addObject:result];
+        
+    }else if([backParam[@"businessType"] integerValue] == BjcaBusinessAutomationSign){
+        
+        if ([backParam[@"status"] isEqualToString:@"3000"]) {
+            
+             [array addObject:backParam];
+            
+        }else{
+            
+        NSMutableDictionary*dict=[NSMutableDictionary dictionary];
+        NSArray*SignDataArr=backParam[@"SignDataArr"];
+        NSDictionary*dictData=SignDataArr[0];
+   NSArray*dataAry=@[@{@"uniqueId":dictData[@"signDataJobID"],@"signP1Data":dictData[@"signature"]}];
+        [dict setValue:@"0" forKey:@"status"];
+        [dict setValue:@"操作成功" forKey:@"message"];
+        [dict setValue:backParam[@"SignJobID"] forKey:@"signId"];
+        [dict setValue:dataAry forKey:@"signedList"];
+        [array addObject:dict];
+        }
     }else{
         [array addObject:backParam];
     }
@@ -299,5 +328,6 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
     }
 }
 @end
+
 
 
