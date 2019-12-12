@@ -1,11 +1,16 @@
+require 'json'
+
+package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
+
+
 Pod::Spec.new do |s|
 
 #名称
 s.name         = 'react-native-ywx-sign'
 
 #版本号
-s.version      = '1.2.0'
-
+#s.version      = '1.2.0'
+s.version      = package['version']
 #许可证
 s.license      = { :type => 'MIT' }
 
@@ -24,11 +29,10 @@ s.source       = { :git => 'https://github.com/AbleLHOne/react-native-ywx-sign.g
 #支持最小系统版本
 s.platform     = :ios, '8.0'
 
-#需要包含的源文件,没有要开源出来的
-s.source_files = 'react-native-ywx-sign/RNReactNativeYwxSign/*.{h,m}'
+s.source_files   = 'ios/*.{h,m}'
 
-  s.dependency 'BjcaSignSDK'
-  s.dependency 'React'
- 
+s.dependency 'BjcaSignSDK'
+s.dependency 'React'
+
 
 end

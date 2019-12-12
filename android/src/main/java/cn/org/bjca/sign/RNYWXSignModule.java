@@ -194,9 +194,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
 
         final String callbackKey = CallbackHelper.sign;
-//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
-//            return;
-//        }
+        CallbackHelper.putCallback(callbackKey, callback);
         mActivity = getCurrentActivity();
 
         if (uniqueIdList != null) {
@@ -214,9 +212,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     public void signForTeam(String clientId, ReadableArray uniqueIdList, final Callback callback) {
 
         final String callbackKey = CallbackHelper.signForTeam;
-//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
-//            return;
-//        }
+        CallbackHelper.putCallback(callbackKey, callback);
 
         mActivity = getCurrentActivity();
         if (uniqueIdList != null) {
@@ -309,10 +305,8 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void signBySignet(String signId, final Callback callback) {
-//        final String callbackKey = CallbackHelper.sign;
-//        if (CallbackHelper.checkCallback(callbackKey, callback)) {
-//            return;
-//        }
+        final String callbackKey = CallbackHelper.signBySignet;
+        CallbackHelper.putCallback(callbackKey, callback);
         mActivity = getCurrentActivity();
         SignetSignManage.signBySignet(getCurrentActivity(), signId, new ISignetSign() {
             @Override
@@ -349,10 +343,8 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             signResultBean.setSignedList(signP1List);
         }
 
-        final String callbackKey = CallbackHelper.signForTeam;
-//        CallbackHelper.invoke(callbackKey,jsonObject.toString());
-        invokeJsonCallback(callback, signResultBean.toJson());
-
+        final String callbackKey = CallbackHelper.signBySignet;
+        CallbackHelper.invoke(callbackKey, signResultBean.toJson());
     }
 
 
@@ -388,18 +380,6 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         final static String sign = "sign";
         final static String signBySignet = "signBySignet";
         final static String signForTeam = "signForTeam";
-
-        static boolean checkCallback(String key, Callback callback) {
-            boolean hasCallback = hasCallback(key);
-            putCallback(key, callback);
-//            if (!hasCallback) {
-//                putCallback(key, callback);
-//            }
-//            else {
-//                invokeWorking(callback);
-//            }
-            return hasCallback;
-        }
 
         static boolean hasCallback(String key) {
             return mCallbackMap.get(key) != null;
