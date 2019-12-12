@@ -301,24 +301,18 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
         [result addEntriesFromDictionary:dic];
         [array addObject:result];
         
-    }else if([backParam[@"businessType"] integerValue] == BjcaBusinessAutomationSign){
+    }else if([backParam[@"status"] isEqualToString:@"0"] &&[backParam[@"businessType"] integerValue] == BjcaBusinessAutomationSign){
         
-        if ([backParam[@"status"] isEqualToString:@"3000"]) {
-            
-             [array addObject:backParam];
-            
-        }else{
-            
-        NSMutableDictionary*dict=[NSMutableDictionary dictionary];
-        NSArray*SignDataArr=backParam[@"SignDataArr"];
+        NSDictionary*backDictData=backParam[@"data"];
+        NSArray*SignDataArr=backDictData[@"SignDataArr"];
+
         NSDictionary*dictData=SignDataArr[0];
-   NSArray*dataAry=@[@{@"uniqueId":dictData[@"signDataJobID"],@"signP1Data":dictData[@"signature"]}];
-        [dict setValue:@"0" forKey:@"status"];
-        [dict setValue:@"操作成功" forKey:@"message"];
-        [dict setValue:backParam[@"SignJobID"] forKey:@"signId"];
-        [dict setValue:dataAry forKey:@"signedList"];
+        NSMutableArray*dataAry=[NSMutableArray arrayWithObjects:@{@"uniqueId":dictData[@"signDataJobID"],@"signP1Data":dictData[@"signature"]}, nil];
+
+        NSMutableDictionary*dict =[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"status",@"操作成功",@"message",backDictData[@"SignJobID"],@"signId",dataAry,@"signedList", nil];
+
         [array addObject:dict];
-        }
+
     }else{
         [array addObject:backParam];
     }
