@@ -101,9 +101,6 @@ RCT_EXPORT_METHOD(getStampPic:(RCTResponseSenderBlock)callback){
         }
         
     });
-    
-
-    
 }
 
 #pragma mark 批量签名
@@ -115,6 +112,17 @@ RCT_EXPORT_METHOD(sign:(NSString *)clientId uniqueIds:(NSArray *)uniqueIds compl
         [self.signer bjcaBatchSignList:array userClientId:clientId curViewCtrl:ctrl];
     });
 }
+
+#pragma mark 批量签名业务2
+RCT_EXPORT_METHOD(signWithFirmId:(NSString*)clientId FirmId:(NSString *)firmId uniqueIds:(NSArray *)uniqueIds  completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        NSMutableArray *array = [NSMutableArray arrayWithArray:uniqueIds];
+        [self.signer bjcaBatchSignList:array userClientId:clientId FirmId:firmId curViewCtrl:ctrl];
+    });
+}
+
 
 #pragma mark  根据签名流水号签名
 RCT_EXPORT_METHOD(signBySignet:(NSString *)signId completion:(RCTResponseSenderBlock)callback){
