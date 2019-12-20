@@ -200,6 +200,20 @@ class _SignManager {
         });
     }
 
+
+    /**
+     * 签名操作
+     * @param clientId  app的clientId
+     * @param firmId    签名数据的clientId
+     * @param uniqueIdList  待签列表的uniqueId列表
+     * @param callback
+     */
+    signWithFirmId(clientId, firmId, uniqueIdList, callback) {
+        SignModule.signWithFirmId(clientId, firmId, uniqueIdList, (result) => {
+            this.callbackJson(callback, result);
+        });
+    }
+
     /**
      * 签名操作——协同办公
      * @param clientId
