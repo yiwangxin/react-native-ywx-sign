@@ -192,7 +192,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void sign(String clientId, ReadableArray uniqueIdList, final Callback callback) {
-        this.signWithFirmId(clientId, "", uniqueIdList, callback);
+        this.signWithFirmId(clientId, clientId, uniqueIdList, callback);
     }
 
 
@@ -205,7 +205,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
         if (uniqueIdList != null) {
             List list = uniqueIdList.toArrayList();
-            BJCASDK.getInstance().signWithFirmId(mActivity, clientId, list, new YWXListener() {
+            BJCASDK.getInstance().signWithFirmId(mActivity, clientId,firmId, list, new YWXListener() {
                 @Override
                 public void callback(String s) {
                     CallbackHelper.invoke(callbackKey, s);
