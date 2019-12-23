@@ -119,7 +119,7 @@ RCT_EXPORT_METHOD(signWithFirmId:(NSString*)clientId FirmId:(NSString *)firmId u
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
         NSMutableArray *array = [NSMutableArray arrayWithArray:uniqueIds];
-        [self.signer bjcaBatchSignList:array userClientId:clientId FirmId:firmId curViewCtrl:ctrl];
+        [self.signer signWithFirmId:firmId uniqueIds:array userClientId:clientId curViewCtrl:ctrl];
     });
 }
 
