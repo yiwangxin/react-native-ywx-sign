@@ -1,6 +1,6 @@
 {
   "name": "react-native-ywx-sign",
-  "version": "1.2.6",
+  "version": "1.2.8",
   "description": "a sign service  by 51Trust",
   "main": "index.js",
   "scripts": {
