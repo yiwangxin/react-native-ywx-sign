@@ -15,9 +15,9 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daizhenhong/react-native-ywx-sign.git"
+    "url": "git+https://github.com/yiwangxin/react-native-ywx-sign.git"
   },
   "bugs": {
-    "url": "https://github.com/daizhenhong/react-native-ywx-sign/issues"
+    "url": "https://github.com/yiwangxin/react-native-ywx-sign/issues"
   }
 }
