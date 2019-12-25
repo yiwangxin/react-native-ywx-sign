@@ -12,7 +12,7 @@
     "react-native-ywx-sign"
   ],
   "author": "51trust",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yiwangxin/react-native-ywx-sign.git"
