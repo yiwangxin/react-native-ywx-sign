@@ -10,6 +10,8 @@
 @property (nonatomic,strong) BjcaSignManager *signer;
 
 @property (nonatomic,strong) RCTResponseSenderBlock callBack;
+@property (nonatomic,strong) RCTPromiseResolveBlock resolve;
+@property (nonatomic,strong) RCTPromiseRejectBlock reject;
 
 @end
 
@@ -275,7 +277,7 @@ RCT_EXPORT_METHOD(initCertEnvType:(NSString *)certType){
 }
 
 #pragma mark 开启指纹签名状态
-RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState completion:(RCTResponseSenderBlock)callback){
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.callBack = callback;
@@ -289,6 +291,41 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
         {
             [self.signer bjcaFingerSignClose:ctrl];
         }
+    });
+}
+
+#pragma mark 开启自动签名
+RCT_EXPORT_METHOD(signAutoRequest:(NSString*)clientId firmId:(NSString*)firmId sysTag:(NSString*)sysTag resolver:(RCTPromiseResolveBlock)resolve
+rejecter:(RCTPromiseRejectBlock)reject){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resolve = resolve;
+        self.reject = reject;
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        [self.signer signForSignAutoWithFirmId:firmId
+                                      clientId:clientId
+                                        sysTag:sysTag
+                                   curViewCtrl:ctrl];
+    });
+}
+
+#pragma mark 获取自动签信息
+RCT_EXPORT_METHOD(signAutoInfo:(NSString *)clientId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resolve = resolve;
+        self.reject = reject;
+        [self.signer signAutoInfo:clientId];
+    });
+}
+
+#pragma mark 关闭自动签名
+RCT_EXPORT_METHOD(signAutoStop:(NSString*)clientId firmId:(NSString*)firmId sysTag:(NSString*)sysTag resolver:(RCTPromiseResolveBlock)resolve
+rejecter:(RCTPromiseRejectBlock)reject){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resolve = resolve;
+        self.reject = reject;
+        [self.signer stopSignAutoWithFirmId:firmId clientId:clientId sysTag:sysTag];
     });
 }
 
@@ -327,6 +364,12 @@ RCT_EXPORT_METHOD(alterFingerSignState:(NSString*)fingerSignState :(RCTResponseS
     
     if (self.callBack) {
         self.callBack(array);
+        self.callBack = nil;
+    }
+    if (self.resolve) {
+        self.resolve(backParam);
+        self.resolve = nil;
+        self.reject = nil;
     }
 }
 @end
