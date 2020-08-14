@@ -36,6 +36,7 @@ import cn.org.bjca.sdk.core.inner.manage.SignetSignManage;
 import cn.org.bjca.sdk.core.inner.values.CertEnvType;
 import cn.org.bjca.sdk.core.inner.values.SignetCode;
 import cn.org.bjca.sdk.core.kit.BJCASDK;
+import cn.org.bjca.sdk.core.kit.InnerSdk;
 import cn.org.bjca.sdk.core.kit.YWXListener;
 import cn.org.bjca.sdk.core.manage.SignetManager;
 import cn.org.bjca.sdk.core.values.ConstantParams;
@@ -62,6 +63,7 @@ import cn.org.bjca.signet.component.core.bean.results.SignDataPinResult;
 public class RNYWXSignModule extends ReactContextBaseJavaModule {
     private Activity mActivity;
     private final String TAG = this.getClass().getSimpleName();
+
 
     public RNYWXSignModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -205,7 +207,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
         if (uniqueIdList != null) {
             List list = uniqueIdList.toArrayList();
-            BJCASDK.getInstance().signWithFirmId(mActivity, clientId,firmId, list, new YWXListener() {
+            InnerSdk.get().signWithFirmId(mActivity, clientId, firmId, list, new YWXListener() {
                 @Override
                 public void callback(String s) {
                     CallbackHelper.invoke(callbackKey, s);
@@ -223,7 +225,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         mActivity = getCurrentActivity();
         if (uniqueIdList != null) {
             List list = uniqueIdList.toArrayList();
-            BJCASDK.getInstance().signForTeam(mActivity, clientId, list, new YWXListener() {
+            InnerSdk.get().signForTeam(mActivity, clientId, list, new YWXListener() {
                 @Override
                 public void callback(String s) {
                     CallbackHelper.invoke(callbackKey, s);
@@ -328,6 +330,40 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         });
     }
 
+
+    @ReactMethod
+    public void signAutoRequest(String clientId, String firmId, String sysTag, Promise promise) {
+        PromiseHelper.putPromise(PromiseHelper.signAutoRequest, promise);
+        InnerSdk.get().signForSignAuto(getCurrentActivity(), clientId, firmId, sysTag, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                PromiseHelper.resolve(PromiseHelper.signAutoRequest, s);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void signAutoInfo(String clientId, Promise promise) {
+        PromiseHelper.putPromise(PromiseHelper.signAutoInfo, promise);
+        BJCASDK.getInstance().signAutoInfo(getCurrentActivity(), clientId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                PromiseHelper.resolve(PromiseHelper.signAutoInfo, s);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void signAutoStop(String clientId, String firmId, String sysTag, Promise promise) {
+        PromiseHelper.putPromise(PromiseHelper.signAutoStop, promise);
+        InnerSdk.get().stopSignAuto(getCurrentActivity(), clientId, firmId, sysTag, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                PromiseHelper.resolve(PromiseHelper.signAutoStop, s);
+            }
+        });
+    }
+
     private void signetSignBack(SignDataPinResult signDataResult, Callback callback) {
         SignResultBean signResultBean = new SignResultBean();
         signResultBean.setStatus(signDataResult.getErrCode());
@@ -419,6 +455,50 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             if (callback != null) {
                 callback.invoke(json);
                 mCallbackMap.remove(key);
+            }
+        }
+    }
+
+    private final static class PromiseHelper {
+
+        private static Map<String, Promise> mPromiseMap = new HashMap<>();
+
+        final static String signAutoRequest = "signAutoRequest";
+        final static String signAutoInfo = "signAutoInfo";
+        final static String signAutoStop = "signAutoStop";
+
+        static boolean hasPromise(String key) {
+            return mPromiseMap.get(key) != null;
+        }
+
+        static Promise getPromise(String key) {
+            Promise promise = mPromiseMap.get(key);
+            if (promise != null) {
+                mPromiseMap.remove(key);
+            }
+            return promise;
+        }
+
+        static void putPromise(String key, Promise promise) {
+            mPromiseMap.put(key, promise);
+        }
+
+        static void resolveWorking(Callback callback) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("status", "9000");
+                jsonObject.put("message", "当前任务正在进行，请稍后再试～");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            callback.invoke(jsonObject.toString());
+        }
+
+        static void resolve(String key, String json) {
+            Promise promise = getPromise(key);
+            if (promise != null) {
+                promise.resolve(json);
+                mPromiseMap.remove(key);
             }
         }
     }
