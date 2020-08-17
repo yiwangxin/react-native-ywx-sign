@@ -451,11 +451,14 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         }
 
         static void invoke(String key, String json) {
-            Callback callback = getCallback(key);
-            if (callback != null) {
-                callback.invoke(json);
-                mCallbackMap.remove(key);
+            synchronized (CallbackHelper.class) {
+                Callback callback = getCallback(key);
+                if (callback != null) {
+                    callback.invoke(json);
+                    mCallbackMap.remove(key);
+                }
             }
+
         }
     }
 
