@@ -343,6 +343,17 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void sureGrantSign(String clientId, String firmId, String grantedUserId, String timeOut, Promise promise) {
+        PromiseHelper.putPromise(PromiseHelper.sureGrantSign, promise);
+        InnerSdk.get().sureGrantSign(getCurrentActivity(), clientId, firmId, grantedUserId, timeOut, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                PromiseHelper.resolve(PromiseHelper.sureGrantSign, s);
+            }
+        });
+    }
+
+    @ReactMethod
     public void signAutoInfo(String clientId, Promise promise) {
         PromiseHelper.putPromise(PromiseHelper.signAutoInfo, promise);
         BJCASDK.getInstance().signAutoInfo(getCurrentActivity(), clientId, new YWXListener() {
@@ -467,6 +478,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         private static Map<String, Promise> mPromiseMap = new HashMap<>();
 
         final static String signAutoRequest = "signAutoRequest";
+        final static String sureGrantSign = "sureGrantSign";
         final static String signAutoInfo = "signAutoInfo";
         final static String signAutoStop = "signAutoStop";
 

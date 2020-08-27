@@ -324,6 +324,22 @@ class _SignManager {
   }
   
   /**
+   * 开启授权签名
+   * @param clientId
+   * @param firmId
+   * @param grantedUserId
+   * @param timeOut
+   * @return {Promise<unknown>}
+   */
+  sureGrantSign (clientId, firmId, grantedUserId, timeOut) {
+    return new Promise((resolve) => {
+      SignModule.sureGrantSign(clientId, firmId, grantedUserId, '' + timeOut).then((result) => {
+        resolve(this.translateJsonBean(result))
+      })
+    })
+  }
+  
+  /**
    * 将json字符串转换为你json对象
    * @param json
    * @return {*}
