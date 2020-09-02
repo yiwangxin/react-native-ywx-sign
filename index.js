@@ -340,6 +340,16 @@ class _SignManager {
   }
   
   /**
+   * 设置语言（String类型）
+   * en-英文
+   * zh-中文
+   * @param language
+   */
+  setLanguage (language) {
+    SignModule.setLanguage(language)
+  }
+  
+  /**
    * 将json字符串转换为你json对象
    * @param json
    * @return {*}

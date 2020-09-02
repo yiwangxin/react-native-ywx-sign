@@ -40,4 +40,5 @@ dependencies {
 
     implementation 'com.facebook.react:react-native:+'
     testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion','28.0.3')}"
 }
