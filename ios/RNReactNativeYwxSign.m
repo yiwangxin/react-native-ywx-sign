@@ -162,19 +162,24 @@ RCT_EXPORT_METHOD(keepPin:(NSString *)clientId day:(nonnull NSNumber *)day compl
 
 #pragma mark 当前是否处于免密状态
 RCT_EXPORT_METHOD(isPinExempt:(RCTResponseSenderBlock)callback){
-    BOOL isPin = [BjcaSignManager bjcaExistsFreePin];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    
-    [array addObject:[NSNumber numberWithBool:isPin]];
-    if (callback) {
-        callback(array);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL isPin = [BjcaSignManager bjcaExistsFreePin];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        
+        [array addObject:[NSNumber numberWithBool:isPin]];
+        if (callback) {
+            callback(array);
+        }
+    });
     
 }
 
 #pragma mark 关闭免密
 RCT_EXPORT_METHOD(clearPin){
-    [BjcaSignManager bjcaRemovePin];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [BjcaSignManager bjcaRemovePin];
+    });
+    
 }
 
 #pragma mark 二维码解析
@@ -188,16 +193,22 @@ RCT_EXPORT_METHOD(qrDispose:(NSString *)clientId qrString:(NSString *)qrString c
 
 #pragma mark 获取用户信息
 RCT_EXPORT_METHOD(getCertInfo:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    self.callBack = callback;
-    [self.signer bjcaUserInfo:clientId];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.callBack = callback;
+        [self.signer bjcaUserInfo:clientId];
+    });
+    
 }
 
 
 #pragma mark 打开证书详情页
 RCT_EXPORT_METHOD(showCertView:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
-    UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-    self.callBack=callback;
-    [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack=callback;
+        [self.signer bjcaCertDetail:clientId curViewCtrl:ctrl navColor:nil navFontColor:nil];
+    });
+    
 }
 
 //#pragma mark 获取当前环境地址
@@ -207,13 +218,15 @@ RCT_EXPORT_METHOD(showCertView:(NSString *)clientId completion:(RCTResponseSende
 
 #pragma mark 是否存在证书
 RCT_EXPORT_METHOD(existsCert:(RCTResponseSenderBlock)callback){
-    BOOL cert = [BjcaSignManager bjcaExistsCert];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    
-    [array addObject:[NSNumber numberWithBool:cert]];
-    if (callback) {
-        callback(array);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL cert = [BjcaSignManager bjcaExistsCert];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        
+        [array addObject:[NSNumber numberWithBool:cert]];
+        if (callback) {
+            callback(array);
+        }
+    });
 }
 
 #pragma mark 环境设置
@@ -231,13 +244,15 @@ RCT_EXPORT_METHOD(clearCert){
 
 #pragma mark 获取sdk版本号
 RCT_EXPORT_METHOD(getVersion:(RCTResponseSenderBlock)callback){
-    NSString *version = [BjcaSignManager bjcaVersion];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *version = [BjcaSignManager bjcaVersion];
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        [array addObject:version];
+        if(callback){
+            callback(array);
+        }
+    });
     
-    [array addObject:version];
-    if(callback){
-        callback(array);
-    }
 }
 
 #pragma mark 获取指纹签名状态
@@ -326,6 +341,33 @@ rejecter:(RCTPromiseRejectBlock)reject){
         self.resolve = resolve;
         self.reject = reject;
         [self.signer stopSignAutoWithFirmId:firmId clientId:clientId sysTag:sysTag];
+    });
+}
+
+#pragma mark 开启授权签名
+RCT_EXPORT_METHOD(sureGrantSign:(NSString*)clientId
+                  firmId:(NSString*)firmId
+                  grantedUserId:(NSString*)grantedUserId
+                  timeOut:(NSNumber *_Nonnull)timeOut
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resolve = resolve;
+        self.reject = reject;
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        [self.signer startGrantSign:clientId
+                             firmId:firmId
+                      grantedUserId:grantedUserId
+                            timeOut:[timeOut intValue]
+              currentViewController:ctrl];
+    });
+}
+
+
+#pragma mark 设置本地保存的显示语言
+RCT_EXPORT_METHOD(setLanguage:(NSString *)appLanguage){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [BjcaSignManager bjcaSetAppLanguage:appLanguage];
     });
 }
 
