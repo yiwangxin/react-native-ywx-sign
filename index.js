@@ -333,7 +333,7 @@ class _SignManager {
    */
   sureGrantSign (clientId, firmId, grantedUserId, timeOut) {
     return new Promise((resolve) => {
-      SignModule.sureGrantSign(clientId, firmId, grantedUserId, '' + timeOut).then((result) => {
+      SignModule.sureGrantSign(clientId, firmId, grantedUserId, timeOut).then((result) => {
         resolve(this.translateJsonBean(result))
       })
     })
