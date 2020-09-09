@@ -308,7 +308,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sureGrantSign(String clientId, String firmId, String grantedUserId, String timeOut, Promise promise) {
+    public void sureGrantSign(String clientId, String firmId, String grantedUserId, int timeOut, Promise promise) {
         PromiseHelper.putPromise(PromiseHelper.sureGrantSign, promise);
         InnerSdk.get().sureGrantSign(getCurrentActivity(), clientId, firmId, grantedUserId, timeOut, new YWXListener() {
             @Override
