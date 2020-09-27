@@ -238,6 +238,16 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         callback.invoke(version);
     }
 
+    @ReactMethod
+    public void getOpenId(final Callback callback) {
+        mActivity = getCurrentActivity();
+        String openId = BJCASDK.getInstance().getOpenId(mActivity);
+        if (TextUtils.isEmpty(openId)) {
+            openId = "";
+        }
+        callback.invoke(openId);
+    }
+
 
     @ReactMethod
     public void setServerUrl(int env, final Callback callback) {
