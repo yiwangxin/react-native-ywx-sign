@@ -371,6 +371,21 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)appLanguage){
     });
 }
 
+#pragma mark 获取openId
+RCT_EXPORT_METHOD(getOpenId:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *openId = [BjcaSignManager bjcaOpenId];
+        if (openId == nil) {
+            openId = @"";
+        }
+        if (callback) {
+            NSMutableArray *array = [[NSMutableArray alloc]init];
+            [array addObject:openId];
+            callback(array);
+        }
+    });
+}
+
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
     NSMutableArray *array = [[NSMutableArray alloc]init];
