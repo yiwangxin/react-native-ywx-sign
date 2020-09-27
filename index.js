@@ -192,7 +192,7 @@ class _SignManager {
    * 获取证书的openId
    * @param callback:(openId)=>{}   当存在证书时：返回证书用户的openId，不存在证书时候，返回空字符串 ""
    */
-  getVersion (callback) {
+  getOpenId (callback) {
     SignModule.getOpenId(callback)
   }
   
