@@ -373,6 +373,16 @@ class _SignManager {
     }
     return json
   }
+  
+  /**
+   * 设置是否隐藏签名等待框（android默认开启等待框，ios没有等待框）
+   * @param hide - boolean
+   */
+  setIsHideSignLoading(hide){
+    if(Platform.OS === 'android'){
+      SignModule.setIsHideSignLoading(hide)
+    }
+  }
 }
 
 const SignManager = new _SignManager()

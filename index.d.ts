@@ -228,6 +228,12 @@ declare module 'ywx' {
    */
   export function setLanguage(language: string): void;
 
+  /**
+   * 设置是否隐藏签名等待框（android默认开启等待框，ios没有等待框）
+   * @param hide - boolean
+   */
+  export function setIsHideSignLoading(hide: boolean): void
+
   //export function certDownSuccess(): void;
   //export function disableFingerSign(callback?: (response: YwxResultProps) => void): void;
   //export function drawStamp(clientId: string, callback?: (response: YwxResultProps) => void): void;
