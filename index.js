@@ -186,8 +186,7 @@ class _SignManager {
   getVersion (callback) {
     SignModule.getVersion(callback)
   }
-
-
+  
   /**
    * 获取证书的openId
    * @param callback:(openId)=>{}   当存在证书时：返回证书用户的openId，不存在证书时候，返回空字符串 ""
@@ -378,10 +377,8 @@ class _SignManager {
    * 设置是否隐藏签名等待框（android默认开启等待框，ios没有等待框）
    * @param hide - boolean
    */
-  setIsHideSignLoading(hide){
-    if(Platform.OS === 'android'){
-      SignModule.setIsHideSignLoading(hide)
-    }
+  setIsHideSignLoading (hide) {
+    SignModule.setIsHideSignLoading(hide)
   }
 }
 

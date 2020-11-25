@@ -355,6 +355,13 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
         BJCASDK.getInstance().setLanguage(language);
     }
 
+
+    @ReactMethod
+    public void setIsHideSignLoading(boolean hide) {
+        InnerSdk.get().setIsHideSignLoading(hide);
+    }
+
+
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
