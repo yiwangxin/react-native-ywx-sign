@@ -26,8 +26,6 @@ import cn.org.bjca.sdk.core.kit.InnerSdk;
 import cn.org.bjca.sdk.core.kit.YWXListener;
 import cn.org.bjca.sdk.core.values.ConstantParams;
 import cn.org.bjca.sdk.core.values.EnvType;
-import cn.org.bjca.signet.component.core.bean.params.SignDataInfos;
-import cn.org.bjca.signet.component.core.bean.results.SignDataPinResult;
 
 /*************************************************************************************************
  * <pre>
