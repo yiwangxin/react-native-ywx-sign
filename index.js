@@ -32,14 +32,7 @@ class _SignManager {
    * @param json
    */
   callbackJson (callback, json) {
-    if (Platform.OS === 'android') {
-      try {
-        json = JSON.parse(json)
-      } catch (e) {
-        console.log(json, e)
-      }
-    }
-    callback(json)
+    callback(this.translateJsonBean(json))
   }
   
   /**
@@ -379,6 +372,42 @@ class _SignManager {
    */
   setIsHideSignLoading (hide) {
     SignModule.setIsHideSignLoading(hide)
+  }
+  
+  /**
+   * 显示pin码输入框，并返回pin和pinForNet
+   * @param clientId
+   */
+  showPinWindow (clientId) {
+    return new Promise((resolve) => {
+        SignModule.showPinWindow(clientId, result => {
+          resolve(this.translateJsonBean(result))
+        })
+      },
+    )
+  }
+  
+  /**
+   * 隐藏pin码输入框
+   */
+  hidePinWindow () {
+    return new Promise((resolve) => {
+        SignModule.hidePinWindow(result => {
+          resolve(this.translateJsonBean(result))
+        })
+      },
+    )
+  }
+  
+  /**
+   * 绘制手写签名（医网信app定制）
+   */
+  drawStampWithFirmId (clientId, firmId) {
+    return new Promise((resolve) => {
+      SignModule.drawStampWithFirmId(result => {
+        resolve(this.translateJsonBean(result))
+      })
+    })
   }
 }
 

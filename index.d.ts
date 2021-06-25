@@ -234,6 +234,12 @@ declare module 'ywx' {
    */
   export function setIsHideSignLoading(hide: boolean): void
 
+  export function showPinWindow(clientId: string): Promise<YwxResultProps>
+
+  export function hidePinWindow(): Promise<YwxResultProps>
+
+  export function drawStampWidthFirmId(clientId: string, frimId: string): Promise<YwxResultProps>
+
   //export function certDownSuccess(): void;
   //export function disableFingerSign(callback?: (response: YwxResultProps) => void): void;
   //export function drawStamp(clientId: string, callback?: (response: YwxResultProps) => void): void;

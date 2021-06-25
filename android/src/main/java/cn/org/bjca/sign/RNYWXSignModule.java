@@ -133,6 +133,43 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     *
+     * @param clientId
+     * @param firmId
+     * @param callback
+     */
+    @ReactMethod
+    public void drawStampWidthFirmId(String clientId,String firmId, final Callback callback) {
+        mActivity = getCurrentActivity();
+        InnerSdk.get().drawStamp(mActivity, clientId,firmId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
+    @ReactMethod
+    public void showPinWindow(String clientId, final Callback callback) {
+        mActivity = getCurrentActivity();
+        BJCASDK.getInstance().showPinWindow(mActivity, clientId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
+    @ReactMethod
+    public void hidePinWindow(final Callback callback) {
+        mActivity = getCurrentActivity();
+        BJCASDK.getInstance().hidePinWindow( new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
+
+    /**
      * 获取签章图片
      */
     @ReactMethod
