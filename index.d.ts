@@ -45,7 +45,7 @@ declare module 'ywx' {
    *
    * @note 这个有必要加callback吗
    */
-  export function setServerUrl(envNo: any, callback?: (response: YwxResultProps) => void): void;
+  export function setServerUrl(envNo: any, clientId: string,callback?: (response: YwxResultProps) => void): void;
 
   /**
    * 重置证书密码

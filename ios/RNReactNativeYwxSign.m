@@ -85,6 +85,20 @@ RCT_EXPORT_METHOD(drawStamp:(NSString *)clientId completion:(RCTResponseSenderBl
     });
 }
 
+RCT_EXPORT_METHOD(drawStampWithFirmId:(NSString *)clientId
+                  firmId:(NSString *)firmId
+                  completion:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.callBack = callback;
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        [self.signer bjcaSetStamp:clientId
+                       firmIdList:@[firmId]
+                      curViewCtrl:ctrl
+                         navColor:[UIColor whiteColor]
+                     navFontColor:[UIColor blackColor]];
+    });
+}
+
 #pragma mark 获取签章图片
 RCT_EXPORT_METHOD(getStampPic:(RCTResponseSenderBlock)callback){
   
@@ -132,7 +146,7 @@ RCT_EXPORT_METHOD(signBySignet:(NSString *)signId completion:(RCTResponseSenderB
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
-        [self.signer bjcaBatchSignId:signId curViewCtrl:ctrl];
+//        [self.signer bjcaBatchSignId:signId curViewCtrl:ctrl];
     });
 }
 
@@ -230,9 +244,11 @@ RCT_EXPORT_METHOD(existsCert:(RCTResponseSenderBlock)callback){
 }
 
 #pragma mark 环境设置
-RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType completion:(RCTResponseSenderBlock)callback){
-    //    对安卓的兼容保留callback
-    [BjcaSignManager bjcaSetServerURL:[severType intValue]];
+RCT_EXPORT_METHOD(setServerUrl:(NSNumber *_Nonnull)severType clientId:(NSString*)clientId completion:(RCTResponseSenderBlock)callback){
+    // 对安卓的兼容保留callback
+    [BjcaSignManager.bjcaShareBjcaSignManager startWithClientId:clientId
+                                                    environment:[severType intValue]];
+    [BjcaSignManager.bjcaShareBjcaSignManager setupUIForNavigationBarTintColor:[UIColor blackColor] navigationBarBackgroundColor:[UIColor whiteColor]];
 }
 
 #pragma mark 清除证书
@@ -386,6 +402,22 @@ RCT_EXPORT_METHOD(getOpenId:(RCTResponseSenderBlock)callback){
     });
 }
 
+#pragma mark 显示Pin码键盘
+RCT_EXPORT_METHOD(showPinWindow:(NSString*)clientId completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.callBack = callback;
+        [self.signer showPinWindow];
+    });
+}
+
+#pragma mark 消失Pin码键盘
+RCT_EXPORT_METHOD(hidePinWindow:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.callBack = callback;
+//        [self.signer showPinWindow];
+    });
+}
+
 #pragma mark -业务回调
 - (void)BjcaFinished:(NSDictionary *)backParam{
     NSMutableArray *array = [[NSMutableArray alloc]init];
@@ -396,7 +428,7 @@ RCT_EXPORT_METHOD(getOpenId:(RCTResponseSenderBlock)callback){
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:backParam];
         [result removeObjectForKey:@"data"];
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:backParam[@"data"]];
-        NSMutableArray *uniqueIds = dic[@"uniqueId"];
+        NSMutableArray *uniqueIds = dic[@"uniqueIds"];
         [dic removeObjectForKey:@"uniqueId"];
         [dic setObject:uniqueIds forKey:@"uniqueIds"];
         

@@ -71,14 +71,19 @@ class _SignManager {
   /**
    * 设置医网信医师sdk的服务器类型
    * @param evnType 医师sdk的服务类型
+   * @param clientId ios需要
    * @param callback
    *
    * @note 这个有必要加callback吗
    */
-  setServerUrl (evnType, callback) {
-    SignModule.setServerUrl(evnType, callback)
+   setServerUrl (evnType, clientId,callback) {
+    if (Platform.OS === 'android') {
+      SignModule.setServerUrl(evnType, callback)
+    } else {
+      SignModule.setServerUrl(evnType, clientId,callback)
+    }
   }
-  
+
   /**
    * 重置证书密码
    * @param clientId
