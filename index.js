@@ -77,11 +77,7 @@ class _SignManager {
    * @note 这个有必要加callback吗
    */
    setServerUrl (evnType, clientId,callback) {
-    if (Platform.OS === 'android') {
-      SignModule.setServerUrl(evnType, callback)
-    } else {
       SignModule.setServerUrl(evnType, clientId,callback)
-    }
   }
 
   /**
