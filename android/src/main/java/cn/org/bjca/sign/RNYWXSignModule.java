@@ -285,7 +285,7 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void setServerUrl(int env, final Callback callback) {
+    public void setServerUrl(int env,String clientId, final Callback callback) {
         EnvType envType = EnvType.PUBLIC;
         int length = EnvType.values().length;
         if (env >= 0 && env < length) {
