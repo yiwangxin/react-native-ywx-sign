@@ -31,6 +31,15 @@ declare module 'ywx' {
    */
   export function certDown(clientId: string, phone: string, callback?: (response: YwxResultProps) => void): void;
 
+    /**
+   * 证书下载
+   * @param clientId 厂商clienId
+   * @param phone     手机号
+   * @param firmId    子厂商ID
+   * @param callback
+   */
+  export function certDownWithFirmId(clientId: string, phone: string, firmId: string, callback?: (response: YwxResultProps) => void): void;
+
   /**
    * 证书更新
    * @param clientId 厂商clienId
