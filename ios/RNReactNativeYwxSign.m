@@ -58,6 +58,15 @@ RCT_EXPORT_METHOD(certDown:(NSString *)clientId phone:(NSString *)phone completi
     });
 }
 
+#pragma mark 证书下载
+RCT_EXPORT_METHOD(certDownWithFirmId:(NSString *)clientId phone:(NSString *)phone firmId:(NSString *)firmId completion:(RCTResponseSenderBlock)callback){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
+        self.callBack = callback;
+        [self.signer bjcaCertDown:clientId phoneNum:phone firmId:firmId curViewCtrl:ctrl];
+    });
+}
+
 #pragma mark 证书更新
 RCT_EXPORT_METHOD(certUpdate:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{

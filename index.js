@@ -69,6 +69,19 @@ class _SignManager {
       this.callbackJson(callback, result)
     })
   }
+
+    /**
+   * 证书下载
+   * @param clientId 厂商clienId
+   * @param phone     手机号
+   * @param firmId    子厂商ID
+   * @param callback
+   */
+  certDownWithFirmId (clientId, phone, firmId,callback) {
+    SignModule.certDownWithFirmId(clientId, phone, firmId,(result) => {
+      this.callbackJson(callback, result)
+    })
+  }
   
   /**
    * 证书更新
