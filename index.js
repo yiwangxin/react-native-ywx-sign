@@ -52,7 +52,20 @@ class _SignManager {
    * @param callback
    */
   certDown (clientId, phone, callback) {
-    SignModule.certDown(clientId, phone, (result) => {
+    // SignModule.certDown(clientId, phone, (result) => {
+    //   this.callbackJson(callback, result)
+    // })
+    this.certDownWithFirmId(clientId, phone, null, callback)
+  }
+  
+  /**
+   * 证书下载
+   * @param clientId 厂商clienId
+   * @param phone     手机号
+   * @param callback
+   */
+  certDownWithFirmId (clientId, phone, firmId, callback) {
+    SignModule.certDownWithFirmId(clientId, phone, firmId, (result) => {
       this.callbackJson(callback, result)
     })
   }
@@ -76,10 +89,10 @@ class _SignManager {
    *
    * @note 这个有必要加callback吗
    */
-   setServerUrl (evnType, clientId,callback) {
-      SignModule.setServerUrl(evnType, clientId,callback)
+  setServerUrl (evnType, clientId, callback) {
+    SignModule.setServerUrl(evnType, clientId, callback)
   }
-
+  
   /**
    * 重置证书密码
    * @param clientId
