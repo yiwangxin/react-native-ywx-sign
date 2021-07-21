@@ -78,9 +78,31 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void certDownWithFirmId(String clientId, String phone,String firmId, final Callback callback) {
+        mActivity = getCurrentActivity();
+        InnerSdk.get().certDown(mActivity, clientId, phone,firmId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
+
+    @ReactMethod
     public void certUpdate(String clientId, final Callback callback) {
         mActivity = getCurrentActivity();
         BJCASDK.getInstance().certUpdate(mActivity, clientId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void certUpdateWithFirmId(String clientId,String firmId, final Callback callback) {
+        mActivity = getCurrentActivity();
+        InnerSdk.get().certUpdate(mActivity, clientId,firmId, new YWXListener() {
             @Override
             public void callback(String s) {
                 invokeJsonCallback(callback, s);
