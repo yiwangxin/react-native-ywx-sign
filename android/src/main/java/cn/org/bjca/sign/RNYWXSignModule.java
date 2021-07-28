@@ -109,6 +109,16 @@ public class RNYWXSignModule extends ReactContextBaseJavaModule {
             }
         });
     }
+    @ReactMethod
+    public void certResetPinWithFirmId(String clientId,String firmId, final Callback callback) {
+        mActivity = getCurrentActivity();
+        InnerSdk.get().certResetPin(mActivity, clientId,firmId, new YWXListener() {
+            @Override
+            public void callback(String s) {
+                invokeJsonCallback(callback, s);
+            }
+        });
+    }
 
     @ReactMethod
     public void certResetPin(String clientId, final Callback callback) {

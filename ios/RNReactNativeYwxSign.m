@@ -76,34 +76,12 @@ RCT_EXPORT_METHOD(certUpdate:(NSString *)clientId completion:(RCTResponseSenderB
     });
 }
 
-#pragma mark 证书更新，指定厂商
-RCT_EXPORT_METHOD(certUpdateWithFirmId:(NSString *)clientId
-                  firmId:(NSString *)firmId
-                  completion:(RCTResponseSenderBlock)callback){
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-        self.callBack = callback;
-        [self.signer bjcaCertUpdate:clientId firmId:firmId curViewCtrl:ctrl];
-    });
-}
-
 #pragma mark 证书密码重置
 RCT_EXPORT_METHOD(certResetPin:(NSString *)clientId completion:(RCTResponseSenderBlock)callback){
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = [BjcaRNTools getCurrentVC];
         self.callBack = callback;
         [self.signer bjcaCertReset:clientId curViewCtrl:ctrl];
-    });
-}
-
-#pragma mark 证书密码重置,指定厂商
-RCT_EXPORT_METHOD(certResetPinWithFirmId:(NSString *)clientId
-                  firmId:(NSString *)firmId
-                  completion:(RCTResponseSenderBlock)callback){
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *ctrl = [BjcaRNTools getCurrentVC];
-        self.callBack = callback;
-        [self.signer bjcaCertReset:clientId firmId:firmId curViewCtrl:ctrl];
     });
 }
 

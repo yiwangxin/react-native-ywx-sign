@@ -70,26 +70,23 @@ class _SignManager {
     })
   }
 
-    /**
-   * 证书下载
-   * @param clientId 厂商clienId
-   * @param phone     手机号
-   * @param firmId    子厂商ID
-   * @param callback
-   */
-  certDownWithFirmId (clientId, phone, firmId,callback) {
-    SignModule.certDownWithFirmId(clientId, phone, firmId,(result) => {
-      this.callbackJson(callback, result)
-    })
-  }
-  
   /**
    * 证书更新
    * @param clientId 厂商clienId
    * @param callback
    */
   certUpdate (clientId, callback) {
-    SignModule.certUpdate(clientId, (result) => {
+    this.certUpdateWithFirmId(clientId, null, callback)
+  }
+
+  /**
+   * 证书更新
+   * @param clientId 厂商clienId
+   * @param firmId   子厂商id
+   * @param callback
+   */
+  certUpdateWithFirmId (clientId, firmId, callback) {
+    SignModule.certUpdateWithFirmId(clientId, firmId, (result) => {
       this.callbackJson(callback, result)
     })
   }
@@ -112,7 +109,17 @@ class _SignManager {
    * @param callback
    */
   certResetPin (clientId, callback) {
-    SignModule.certResetPin(clientId, (result) => {
+    this.certResetPinWithFirmId(clientId, null, callback)
+  }
+
+  /**
+   * 重置证书密码
+   * @param clientId 厂商clienId
+   * @param firmId   子厂商id
+   * @param callback
+   */
+   certResetPinWithFirmId (clientId, firmId, callback) {
+    SignModule.certResetPinWithFirmId(clientId, firmId, (result) => {
       this.callbackJson(callback, result)
     })
   }
