@@ -71,7 +71,7 @@ class _SignManager {
   }
 
     /**
-   * 证书下载userCenter/faceDetect/getFaceId
+   * 证书下载
    * @param clientId 厂商clienId
    * @param phone     手机号
    * @param firmId    子厂商ID
