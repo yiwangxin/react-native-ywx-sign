@@ -41,20 +41,19 @@ declare module 'ywx' {
   export function certDownWithFirmId(clientId: string, phone: string, firmId: string, callback?: (response: YwxResultProps) => void): void;
 
   /**
-   * 证书下载，指定渠道
-   * @param clientId
-   * @param phone
-   * @param firmId
-   * @param callback
-   */
-  export function certDownWithFirmId(clientId: string, phone: string, firmId: string, callback?: (response: YwxResultProps) => void): void;
-
-  /**
    * 证书更新
    * @param clientId 厂商clienId
    * @param callback
    */
   export function certUpdate(clientId: string, callback?: (response: YwxResultProps) => void): void;
+
+  /**
+   * 证书更新，指定渠道
+   * @param clientId
+   * @param firmId
+   * @param callback
+   */
+  export function certUpdateWithFirmId(clientId: string, firmId: string, callback?: (response: YwxResultProps) => void): void;
 
   /**
    * 设置医网信医师sdk的服务器类型
@@ -71,6 +70,14 @@ declare module 'ywx' {
    * @param callback
    */
   export function certResetPin(clientId: string, callback?: (response: YwxResultProps) => void): void;
+
+  /**
+   * 证书密码重置，指定渠道
+   * @param clientId
+   * @param firmId
+   * @param callback
+   */
+   export function certResetPinWithFirmId(clientId: string, firmId: string, callback?: (response: YwxResultProps) => void): void;
 
   /**
    * 展示证书详情
