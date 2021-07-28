@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
 //    api fileTree(dir: 'libs', include: ['*.aar'])
-    api (name: 'ywx-sdk-contain-3.6.8-03', ext:'aar')
+    api (name: 'ywx-sdk-contain-3.6.8-04', ext:'aar')
     implementation 'com.google.code.gson:gson:2.8.1'
 
     implementation 'com.facebook.react:react-native:+'
