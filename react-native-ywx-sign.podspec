@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/*.{h,m}"
 
   s.dependency 'React'
-  s.dependency 'BjcaSignSDK'
+  s.dependency 'BjcaSignSDK', '= 4.1.1-beta.1'
 end

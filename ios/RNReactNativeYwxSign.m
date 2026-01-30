@@ -40,6 +40,7 @@ static NSString * const BjcaCertMass = @"CertMass";
 - (NSDictionary *)constantsToExport {
     return @{@"BjcaPublic": @(BjcaPublic),
              @"BjcaIntegrate": @(BjcaIntegrate),
+             @"BjcaSZYX": @(BjcaSZYX),
              @"BjcaDev": @(BjcaDev),
              @"BjcaTest": @(BjcaTest),
              @"BjcaFingerSignOn": @"YES",

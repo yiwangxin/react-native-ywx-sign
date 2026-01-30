@@ -10,6 +10,7 @@ class _SignManager {
    */
   envType = {
     public: SignModule.BjcaPublic,  //正式环境
+    szyx: SignModule.BjcaSZYX,  //医信环境
     integrate: SignModule.BjcaIntegrate, //集成环境
     test: SignModule.BjcaTest,    //测试环境
     dev: SignModule.BjcaDev,      //开发环境
