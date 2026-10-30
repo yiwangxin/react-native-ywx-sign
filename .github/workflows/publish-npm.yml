@@ -1,0 +1,75 @@
+name: Publish sealed RN package
+"on":
+  release:
+    types: [published]
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: npm-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'rn-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Download sealed package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/sdk-release"
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.tgz' --pattern 'release-identity.json' --dir "$RUNNER_TEMP/sdk-release"
+      - name: Verify release identity
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, re, tarfile
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sdk-release'
+          identity = json.loads((root / 'release-identity.json').read_text())
+          archives = list(root.glob('*.tgz'))
+          assert len(archives) == 1, 'Exactly one sealed archive is required'
+          archive = archives[0]
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          assert digest == identity['sha256'], 'Archive digest differs from sealed identity'
+          with tarfile.open(archive) as bundle:
+              package = json.load(bundle.extractfile('package/package.json'))
+          assert package['name'] == 'react-native-ywx-sign', 'Package is not authorized'
+          version = package['version']
+          assert re.fullmatch(r'1\.4\.\d+-(alpha|beta|rc)\.\d+', version), 'This workflow only publishes maintenance prereleases'
+          assert identity['package'] == package['name'] and identity['version'] == version
+          assert os.environ['RELEASE_TAG'] == 'rn-' + version
+          assert package['repository']['url'] == 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '.git'
+          assert package['publishConfig']['registry'] == 'https://registry.npmjs.org/'
+          archive.rename(root / 'package.tgz')
+          PY
+      - name: Publish through npm OIDC
+        run: |
+          printf 'registry=https://registry.npmjs.org/\n' > "$RUNNER_TEMP/npm-oidc.npmrc"
+          export NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-oidc.npmrc"
+          unset NODE_AUTH_TOKEN NPM_TOKEN
+          npm publish "$RUNNER_TEMP/sdk-release/package.tgz" --registry=https://registry.npmjs.org/ --access public --tag next
+      - name: Verify public npm bytes
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, urllib.request
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sdk-release'
+          identity = json.loads((root / 'release-identity.json').read_text())
+          url = 'https://registry.npmjs.org/react-native-ywx-sign/' + identity['version']
+          with urllib.request.urlopen(url, timeout=60) as response:
+              published = json.load(response)
+          tarball = published['dist']['tarball']
+          assert tarball.startswith('https://registry.npmjs.org/react-native-ywx-sign/-/')
+          with urllib.request.urlopen(tarball, timeout=60) as response:
+              digest = hashlib.sha256(response.read()).hexdigest()
+          assert digest == identity['sha256'], 'Published tarball differs from sealed archive'
+          receipt = dict(identity, status='REMOTE_BYTES_VERIFIED', authMode='oidc', runId=os.environ['GITHUB_RUN_ID'], repository=os.environ['GITHUB_REPOSITORY'])
+          print('YWX_NPM_PUBLISH_RECEIPT=' + json.dumps(receipt, sort_keys=True))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('Published ' + identity['package'] + '@' + identity['version'] + '\n\nSHA-256: ' + digest + '\n')
+          PY
