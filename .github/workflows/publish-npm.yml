@@ -62,14 +62,15 @@ jobs:
           identity = json.loads((root / 'release-identity.json').read_text())
           url = 'https://registry.npmjs.org/react-native-ywx-sign/' + identity['version']
           # npm may return success before the new version reaches its read API.
-          # Only wait for that documented 404 window; never retry npm publish.
-          for attempt in range(13):
+          # The verified registry propagation exceeded two minutes; allow up to 15 minutes.
+          # Only retry 404 reads; never retry npm publish or accept mismatched bytes.
+          for attempt in range(91):
               try:
                   with urllib.request.urlopen(url, timeout=60) as response:
                       published = json.load(response)
                   break
               except urllib.error.HTTPError as error:
-                  if error.code != 404 or attempt == 12:
+                  if error.code != 404 or attempt == 90:
                       raise
                   time.sleep(10)
           tarball = published['dist']['tarball']
